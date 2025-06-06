@@ -1,0 +1,40 @@
+<div class="container mx-auto px-4">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold">製品</h1>
+    <%= link_to "製品追加", new_product_path, 
+        class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+  </div>
+  
+  <hr class="mb-6" />
+  
+  <% @products.each do |product| %>
+    <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4"><%= product.name %></h2>
+      
+      <% if product.invalid_cost %>
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          原材料の計算が正しく出来ていません
+        </div>
+      <% end %>
+      
+      <ul class="space-y-2 text-gray-700">
+        <li><strong>仕込み量:</strong> <%= product.count %></li>
+        <li><strong>原価:</strong> ¥<%= number_with_precision product.cost, precision: 2 %></li>
+        <li><strong>１つあたり原価:</strong> ¥<%= number_with_precision product.cost_per_unit, precision: 2 %></li>
+        <li><strong>原価<%= (current_user.profit_ratio * 100).to_i %>%として:</strong> ¥<%= number_with_precision current_user.selling_price_for(product.cost_per_unit), precision: 2 %></li>
+        <li class="pt-2">
+          <%= link_to "詳細", product_path(product), 
+              class: "text-blue-600 hover:text-blue-800 font-medium" %>
+        </li>
+      </ul>
+    </div>
+  <% end %>
+  
+  <% if @products.empty? %>
+    <div class="text-center py-12">
+      <p class="text-gray-500 text-lg">まだ製品が登録されていません。</p>
+      <%= link_to "最初の製品を追加", new_product_path, 
+          class: "mt-4 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+    </div>
+  <% end %>
+</div>

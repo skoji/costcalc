@@ -1,30 +1,35 @@
 class MaterialsController < ApplicationController
-  before_action :set_material, only: [:show, :edit, :update, :destroy]
+  before_action :set_material, only: [:show, :destroy]
   
   def index
-    @materials = current_user.materials
+    @materials = current_user.materials.includes(material_quantities: :unit)
   end
 
   def new
-    @material = current_user.materials.build
+    @material_form = MaterialForm.new
   end
 
   def create
-    @material = current_user.materials.build(material_params)
+    @material_form = MaterialForm.new(material_form_params)
     
-    if @material.save
-      redirect_to @material, notice: '材料が作成されました。'
+    if @material_form.save(current_user)
+      redirect_to materials_path, notice: '材料が作成されました。'
     else
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
+    material = current_user.materials.find(params[:id])
+    @material_form = MaterialForm.new(id: material.id)
   end
 
   def update
-    if @material.update(material_params)
-      redirect_to @material, notice: '材料が更新されました。'
+    material = current_user.materials.find(params[:id])
+    @material_form = MaterialForm.new(material_form_params.merge(id: material.id))
+    
+    if @material_form.save(current_user)
+      redirect_to materials_path, notice: '材料が更新されました。'
     else
       render :edit, status: :unprocessable_entity
     end
@@ -44,7 +49,16 @@ class MaterialsController < ApplicationController
     @material = current_user.materials.find(params[:id])
   end
   
-  def material_params
-    params.require(:material).permit(:name, :price)
+  def material_form_params
+    params.require(:material_form).permit(
+      :material_name,
+      :material_price,
+      material_quantities_attributes: [
+        :id,
+        :material_count,
+        :unit_id,
+        :_destroy
+      ]
+    )
   end
 end

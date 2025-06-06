@@ -1,0 +1,141 @@
+<div class="container mx-auto px-4 max-w-4xl">
+  <h1 class="text-3xl font-bold mb-6">製品新規登録</h1>
+  
+  <% if flash[:error] %>
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      <%= flash[:error] %>
+    </div>
+  <% end %>
+  
+  <div class="bg-white shadow-md rounded-lg p-6">
+    <%= form_with model: @product_form, url: products_path, local: true, class: "space-y-6" do |form| %>
+      
+      <!-- 基本情報 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <%= form.label :product_name, "製品名", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= form.text_field :product_name, 
+              class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
+        </div>
+
+        <div>
+          <%= form.label :product_count, "仕込み数", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= form.number_field :product_count, step: 0.1, 
+              class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
+        </div>
+      </div>
+
+      <!-- 原材料セクション -->
+      <div class="border-t pt-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">原材料</h3>
+        
+        <%= form.fields_for :product_ingredients do |ingredient| %>
+          <div class="grid grid-cols-12 gap-2 mb-3 p-3 bg-gray-50 rounded">
+            <%= ingredient.hidden_field :id %>
+            
+            <!-- 材料選択（隠しフィールド）-->
+            <%= ingredient.select :material_id, 
+                ([['選択..', -1]] + current_user.materials.map { |m| [m.name, m.id] }.sort_by {|m| m[0]}).to_h, 
+                {}, { style: 'display: none', class: 'material-select' } %>
+            
+            <!-- 材料名入力（オートコンプリート）-->
+            <div class="col-span-4">
+              <input type="text" 
+                     placeholder="材料名を入力" 
+                     class="material-text-select w-full px-2 py-1 border border-gray-300 rounded text-sm" 
+                     data-index='<%= ingredient.index %>' 
+                     autocomplete="on" 
+                     list="material_list" 
+                     value="<%= ingredient.object.material_name %>" />
+            </div>
+            
+            <!-- 分量 -->
+            <div class="col-span-2">
+              <%= ingredient.number_field :ingredient_count, 
+                  step: 0.1, placeholder: "分量",
+                  class: "w-full px-2 py-1 border border-gray-300 rounded text-sm" %>
+            </div>
+            
+            <!-- 単位 -->
+            <div class="col-span-2">
+              <%= ingredient.select :unit_id, 
+                  current_user.units.map{ |u| [u.name, u.id] }.to_h, 
+                  { prompt: "単位" },
+                  { class: "w-full px-2 py-1 border border-gray-300 rounded text-sm" } %>
+            </div>
+            
+            <!-- 削除チェックボックス -->
+            <div class="col-span-2 flex items-center">
+              <%= ingredient.check_box :delete, { class: 'mr-1' } %>
+              <%= ingredient.label :delete, '削除', { class: 'text-sm text-gray-600' } %>
+            </div>
+          </div>
+        <% end %>
+        
+        <!-- 材料追加ボタン -->
+        <div class="mb-4">
+          <%= form.submit '材料追加', class: 'bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-sm' %>
+        </div>
+      </div>
+
+      <!-- アクションボタン -->
+      <div class="flex space-x-4 pt-4 border-t">
+        <%= form.submit '新規登録', class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+        <%= link_to "キャンセル", products_path, 
+            class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<!-- 材料リスト（オートコンプリート用） -->
+<datalist id="material_list">
+  <% current_user.materials.sort_by {|m| m.name }.each do |m| %>
+    <option value='<%= m.name %>'>
+  <% end %>
+</datalist>
+
+<!-- JavaScript for material autocomplete -->
+<script>
+  const materials = <%= current_user.materials.map { |m| [m.name, m.id] }.to_h.to_json.html_safe %>;
+  
+  function initMaterialSelects() {
+    const materialTextInputs = document.querySelectorAll('.material-text-select');
+    
+    materialTextInputs.forEach((input) => {
+      const index = input.dataset.index;
+      const hiddenSelect = document.querySelector(`#product_form_product_ingredients_attributes_${index}_material_id`);
+      
+      if (hiddenSelect) {
+        // 既存の選択状態を復元
+        Array.from(hiddenSelect.options).forEach((option) => {
+          if (option.selected && option.value != -1) {
+            input.value = option.text;
+          }
+        });
+        
+        // 入力変更時の処理
+        input.addEventListener('input', (event) => {
+          const materialId = materials[input.value];
+          if (materialId) {
+            hiddenSelect.value = materialId;
+          } else {
+            hiddenSelect.value = -1;
+          }
+        });
+        
+        // フォーカスアウト時の処理（無効な材料名をクリア）
+        input.addEventListener('blur', (event) => {
+          if (!materials[input.value]) {
+            input.value = '';
+            hiddenSelect.value = -1;
+          }
+        });
+      }
+    });
+  }
+  
+  // ページロード時とTurbo遷移時に初期化
+  document.addEventListener('DOMContentLoaded', initMaterialSelects);
+  document.addEventListener('turbo:load', initMaterialSelects);
+</script>

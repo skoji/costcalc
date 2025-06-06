@@ -8,6 +8,7 @@ puts "Creating sample data for CostCalc..."
 sample_user = User.find_or_create_by!(email: 'demo@example.com') do |user|
   user.password = 'password123'
   user.password_confirmation = 'password123'
+  user.profit_ratio = 0.3  # 30%のデフォルト利益率
 end
 
 puts "Created user: #{sample_user.email}"
@@ -85,29 +86,67 @@ end
 
 puts "Created #{materials.count} materials"
 
-# 材料数量を作成（いくつかの材料に対して）
-material_quantities_data = [
-  { material: '小麦粉', unit: 'kg', count: 1.0 },
-  { material: '砂糖', unit: 'kg', count: 1.0 },
-  { material: '塩', unit: 'kg', count: 1.0 },
-  { material: 'バター', unit: 'g', count: 200.0 },
-  { material: '卵', unit: '個', count: 10.0 },
-  { material: '牛乳', unit: 'L', count: 1.0 },
-  { material: 'りんご', unit: '個', count: 5.0 },
-  { material: '鶏胸肉', unit: 'kg', count: 1.0 },
-  { material: '醤油', unit: 'ml', count: 500.0 },
-  { material: 'チーズ', unit: 'g', count: 200.0 }
-]
-
-material_quantities_data.each do |mq_data|
-  material = materials[mq_data[:material]]
-  unit = units[mq_data[:unit]]
+# 全ての材料に材料数量を作成
+materials_data.each do |mat_data|
+  material = materials[mat_data[:name]]
   
-  MaterialQuantity.find_or_create_by!(
-    material: material,
-    unit: unit
-  ) do |mq|
-    mq.count = mq_data[:count]
+  # 基本材料（粉類、調味料）
+  case mat_data[:name]
+  when '小麦粉', '砂糖', '塩', 'ベーキングパウダー', 'パン粉', 'ココアパウダー'
+    # 1000gを基準単位とする
+    MaterialQuantity.find_or_create_by!(material: material, unit: units['g']) do |mq|
+      mq.count = 1000.0
+    end
+  when 'バター', 'チーズ'
+    # 200gパックを基準とする
+    MaterialQuantity.find_or_create_by!(material: material, unit: units['g']) do |mq|
+      mq.count = 200.0
+    end
+  when '卵'
+    # 10個パックを基準とする
+    MaterialQuantity.find_or_create_by!(material: material, unit: units['個']) do |mq|
+      mq.count = 10.0
+    end
+  when '牛乳'
+    # 1Lパックを基準とする
+    MaterialQuantity.find_or_create_by!(material: material, unit: units['L']) do |mq|
+      mq.count = 1.0
+    end
+  when 'バニラエッセンス'
+    # 30ml瓶を基準とする
+    MaterialQuantity.find_or_create_by!(material: material, unit: units['ml']) do |mq|
+      mq.count = 30.0
+    end
+  when 'りんご', 'レモン', '人参', '玉ねぎ', 'じゃがいも', 'トマト'
+    # 個数で販売
+    MaterialQuantity.find_or_create_by!(material: material, unit: units['個']) do |mq|
+      mq.count = 1.0
+    end
+  when '鶏胸肉', '豚バラ肉', '牛ひき肉', 'サーモン'
+    # 100gあたりの価格に設定
+    MaterialQuantity.find_or_create_by!(material: material, unit: units['g']) do |mq|
+      mq.count = 100.0
+    end
+  when '醤油', 'みそ', 'みりん', '料理酒', 'オリーブオイル'
+    # 500ml容器を基準とする
+    MaterialQuantity.find_or_create_by!(material: material, unit: units['ml']) do |mq|
+      mq.count = 500.0
+    end
+  when '胡椒', 'ガーリックパウダー'
+    # 50g容器を基準とする
+    MaterialQuantity.find_or_create_by!(material: material, unit: units['g']) do |mq|
+      mq.count = 50.0
+    end
+  when 'コンソメ'
+    # 1箱（10個入り）を基準とする
+    MaterialQuantity.find_or_create_by!(material: material, unit: units['個']) do |mq|
+      mq.count = 10.0
+    end
+  when 'パスタ'
+    # 500gパックを基準とする
+    MaterialQuantity.find_or_create_by!(material: material, unit: units['g']) do |mq|
+      mq.count = 500.0
+    end
   end
 end
 

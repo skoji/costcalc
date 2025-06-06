@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   # Devise authentication
-  devise_for :users
+  devise_for :users, controllers: {
+    registrations: 'users/registrations'
+  }
   
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -13,7 +15,8 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   resources :materials
+  resources :products
   
   # Defines the root path route ("/")
-  root "materials#index"
+  root "products#index"
 end
