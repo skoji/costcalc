@@ -2,16 +2,15 @@ class MaterialsController < ApplicationController
   before_action :set_material, only: [:show, :edit, :update, :destroy]
   
   def index
-    @materials = Material.all
+    @materials = current_user.materials
   end
 
   def new
-    @material = Material.new
+    @material = current_user.materials.build
   end
 
   def create
-    # 暫定的にuser_id = 1を使用（後で認証実装時に変更）
-    @material = Material.new(material_params.merge(user_id: 1))
+    @material = current_user.materials.build(material_params)
     
     if @material.save
       redirect_to @material, notice: '材料が作成されました。'
@@ -42,7 +41,7 @@ class MaterialsController < ApplicationController
   private
   
   def set_material
-    @material = Material.find(params[:id])
+    @material = current_user.materials.find(params[:id])
   end
   
   def material_params

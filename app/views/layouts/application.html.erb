@@ -29,6 +29,22 @@
           <div class="text-xl font-semibold text-gray-700">
             <%= link_to "CostCalc", root_path %>
           </div>
+          
+          <div class="flex items-center space-x-4">
+            <% if user_signed_in? %>
+              <span class="text-gray-600">
+                <%= current_user.email %>
+              </span>
+              <%= link_to "ログアウト", destroy_user_session_path, 
+                  data: { turbo_method: :delete }, 
+                  class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" %>
+            <% else %>
+              <%= link_to "ログイン", new_user_session_path, 
+                  class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+              <%= link_to "新規登録", new_user_registration_path, 
+                  class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" %>
+            <% end %>
+          </div>
         </div>
       </div>
     </nav>
