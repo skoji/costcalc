@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class ProductIngredientFormTest < ActiveSupport::TestCase
   def setup
@@ -6,14 +6,14 @@ class ProductIngredientFormTest < ActiveSupport::TestCase
     @unit_g = Unit.create!(name: "g", user: @user)
     @unit_kg = Unit.create!(name: "kg", user: @user)
     @material = Material.create!(name: "砂糖", price: 200.0, user: @user)
-    
+
     # MaterialQuantityを作成してコスト計算を可能にする
     @material_quantity = MaterialQuantity.create!(
       material: @material,
       unit: @unit_kg,
       count: 1.0
     )
-    
+
     @product = Product.create!(
       name: "テスト製品",
       count: 4.0,
@@ -27,7 +27,7 @@ class ProductIngredientFormTest < ActiveSupport::TestCase
       unit_id: @unit_g.id,
       ingredient_count: 100.0
     )
-    
+
     assert_equal @material.id, form.material_id
     assert_equal @unit_g.id, form.unit_id
     assert_equal 100.0, form.ingredient_count
@@ -40,9 +40,9 @@ class ProductIngredientFormTest < ActiveSupport::TestCase
       unit: @unit_g,
       count: 150.0
     )
-    
+
     form = ProductIngredientForm.new(ingredient)
-    
+
     assert_equal ingredient.id, form.id
     assert_equal @material.id, form.material_id
     assert_equal @unit_g.id, form.unit_id
@@ -57,11 +57,11 @@ class ProductIngredientFormTest < ActiveSupport::TestCase
       unit_id: @unit_g.id,
       ingredient_count: 200.0
     )
-    
-    assert_difference 'ProductIngredient.count', 1 do
+
+    assert_difference "ProductIngredient.count", 1 do
       form.persist!(@product)
     end
-    
+
     ingredient = ProductIngredient.last
     assert_equal @product, ingredient.product
     assert_equal @material, ingredient.material
@@ -75,8 +75,8 @@ class ProductIngredientFormTest < ActiveSupport::TestCase
       unit_id: @unit_g.id,
       ingredient_count: 200.0
     )
-    
-    assert_no_difference 'ProductIngredient.count' do
+
+    assert_no_difference "ProductIngredient.count" do
       form.persist!(@product)
     end
   end
@@ -87,8 +87,8 @@ class ProductIngredientFormTest < ActiveSupport::TestCase
       unit_id: @unit_g.id,
       ingredient_count: 200.0
     )
-    
-    assert_no_difference 'ProductIngredient.count' do
+
+    assert_no_difference "ProductIngredient.count" do
       form.persist!(@product)
     end
   end
@@ -100,11 +100,11 @@ class ProductIngredientFormTest < ActiveSupport::TestCase
       unit: @unit_g,
       count: 150.0
     )
-    
+
     form = ProductIngredientForm.new(ingredient)
-    form.delete = '1'
-    
-    assert_difference 'ProductIngredient.count', -1 do
+    form.delete = "1"
+
+    assert_difference "ProductIngredient.count", -1 do
       form.persist!(@product)
     end
   end
@@ -114,10 +114,10 @@ class ProductIngredientFormTest < ActiveSupport::TestCase
       material_id: @material.id,
       unit_id: @unit_g.id,
       ingredient_count: 200.0,
-      delete: '1'
+      delete: "1"
     )
-    
-    assert_no_difference 'ProductIngredient.count' do
+
+    assert_no_difference "ProductIngredient.count" do
       form.persist!(@product)
     end
   end

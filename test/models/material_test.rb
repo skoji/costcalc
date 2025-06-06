@@ -32,7 +32,7 @@ class MaterialTest < ActiveSupport::TestCase
   test "should calculate unit price correctly" do
     material = materials(:flour)
     unit = units(:gram)
-    
+
     # 小麦粉: 300円/1000g = 0.3円/g
     expected_unit_price = 300.0 / 1000.0
     assert_equal expected_unit_price, material.unit_price(unit)

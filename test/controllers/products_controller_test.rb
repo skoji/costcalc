@@ -6,20 +6,20 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     @unit_g = Unit.create!(name: "g", user: @user)
     @unit_kg = Unit.create!(name: "kg", user: @user)
     @material = Material.create!(name: "バター", price: 500.0, user: @user)
-    
+
     # MaterialQuantityを作成してコスト計算を可能にする
     MaterialQuantity.create!(
       material: @material,
       unit: @unit_kg,
       count: 1.0
     )
-    
+
     @product = Product.create!(
       name: "テストケーキ",
       count: 8.0,
       user: @user
     )
-    
+
     sign_in @user
   end
 
@@ -36,7 +36,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create product" do
-    assert_difference('Product.count') do
+    assert_difference("Product.count") do
       post products_url, params: {
         product_form: {
           product_name: "新製品",
@@ -59,7 +59,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should add ingredient without creating product" do
-    assert_no_difference('Product.count') do
+    assert_no_difference("Product.count") do
       post products_url, params: {
         commit: "材料追加",
         product_form: {
@@ -115,7 +115,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy product" do
-    assert_difference('Product.count', -1) do
+    assert_difference("Product.count", -1) do
       delete product_url(@product)
     end
 
@@ -128,7 +128,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     post user_session_path, params: {
       user: {
         email: user.email,
-        password: 'password123'
+        password: "password123"
       }
     }
   end

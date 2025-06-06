@@ -3,7 +3,7 @@ class ProductIngredientForm
   include ActiveModel::Attributes
 
   attr_reader :product_ingredient
-  
+
   attribute :ingredient_count, :decimal
   attribute :unit_id, :integer
   attribute :material_id, :integer
@@ -36,31 +36,31 @@ class ProductIngredientForm
 
   def persist!(product)
     # 削除フラグが立っている場合
-    if delete == '1'
+    if delete == "1"
       @product_ingredient.destroy! if @product_ingredient.persisted?
       return
     end
-    
+
     # material_id が無効な場合はスキップ
     return if material_id.blank? || material_id.to_i <= 0
-    
+
     material = Material.find_by(id: material_id)
     return unless material
-    
+
     unit = Unit.find_by(id: unit_id)
     return unless unit
-    
+
     @product_ingredient.material = material
     @product_ingredient.unit = unit
     @product_ingredient.count = ingredient_count
     @product_ingredient.product = product
     @product_ingredient.save!
   end
-  
+
   def material_name
     @product_ingredient&.material&.name
   end
-  
+
   def unit_name
     @product_ingredient&.unit&.name
   end

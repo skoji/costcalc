@@ -44,7 +44,7 @@ materials_data = [
   { name: '牛乳', price: 200.0 },
   { name: 'ベーキングパウダー', price: 180.0 },
   { name: 'バニラエッセンス', price: 150.0 },
-  
+
   # 野菜・フルーツ
   { name: 'りんご', price: 400.0 },
   { name: 'レモン', price: 100.0 },
@@ -52,13 +52,13 @@ materials_data = [
   { name: '玉ねぎ', price: 200.0 },
   { name: 'じゃがいも', price: 300.0 },
   { name: 'トマト', price: 350.0 },
-  
+
   # 肉・魚
   { name: '鶏胸肉', price: 800.0 },
   { name: '豚バラ肉', price: 900.0 },
   { name: '牛ひき肉', price: 1200.0 },
   { name: 'サーモン', price: 1500.0 },
-  
+
   # 調味料・香辛料
   { name: '醤油', price: 250.0 },
   { name: 'みそ', price: 400.0 },
@@ -66,7 +66,7 @@ materials_data = [
   { name: '料理酒', price: 200.0 },
   { name: '胡椒', price: 180.0 },
   { name: 'ガーリックパウダー', price: 220.0 },
-  
+
   # その他
   { name: 'オリーブオイル', price: 600.0 },
   { name: 'チーズ', price: 800.0 },
@@ -89,7 +89,7 @@ puts "Created #{materials.count} materials"
 # 全ての材料に材料数量を作成
 materials_data.each do |mat_data|
   material = materials[mat_data[:name]]
-  
+
   # 基本材料（粉類、調味料）
   case mat_data[:name]
   when '小麦粉', '砂糖', '塩', 'ベーキングパウダー', 'パン粉', 'ココアパウダー'
@@ -184,19 +184,19 @@ product_ingredients_data = [
   { product: 'チョコレートケーキ', material: 'ココアパウダー', unit: 'g', count: 50.0 },
   { product: 'チョコレートケーキ', material: 'バター', unit: 'g', count: 100.0 },
   { product: 'チョコレートケーキ', material: '卵', unit: '個', count: 3.0 },
-  
+
   # アップルパイの材料
   { product: 'アップルパイ', material: '小麦粉', unit: 'g', count: 300.0 },
   { product: 'アップルパイ', material: 'バター', unit: 'g', count: 150.0 },
   { product: 'アップルパイ', material: 'りんご', unit: '個', count: 4.0 },
   { product: 'アップルパイ', material: '砂糖', unit: 'g', count: 100.0 },
-  
+
   # チキンカレーの材料
   { product: 'チキンカレー', material: '鶏胸肉', unit: 'g', count: 400.0 },
   { product: 'チキンカレー', material: '玉ねぎ', unit: '個', count: 2.0 },
   { product: 'チキンカレー', material: '人参', unit: '個', count: 1.0 },
   { product: 'チキンカレー', material: 'じゃがいも', unit: '個', count: 2.0 },
-  
+
   # ハンバーグの材料
   { product: 'ハンバーグ', material: '牛ひき肉', unit: 'g', count: 400.0 },
   { product: 'ハンバーグ', material: '玉ねぎ', unit: '個', count: 1.0 },
@@ -208,7 +208,7 @@ product_ingredients_data.each do |pi_data|
   product = products[pi_data[:product]]
   material = materials[pi_data[:material]]
   unit = units[pi_data[:unit]]
-  
+
   ProductIngredient.find_or_create_by!(
     product: product,
     material: material,

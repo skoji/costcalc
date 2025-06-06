@@ -22,7 +22,7 @@ class DataCompatibilityTest < ActiveSupport::TestCase
       price: 300.0,
       user: user
     )
-    
+
     material_milk = Material.create!(
       name: "牛乳",
       price: 180.0,
@@ -35,7 +35,7 @@ class DataCompatibilityTest < ActiveSupport::TestCase
       unit: unit_gram,
       material: material_flour
     )
-    
+
     MaterialQuantity.create!(
       count: 1.0,  # 1L
       unit: unit_liter,
@@ -56,7 +56,7 @@ class DataCompatibilityTest < ActiveSupport::TestCase
       unit: unit_gram,
       count: 200.0  # 200g
     )
-    
+
     ProductIngredient.create!(
       product: product,
       material: material_milk,
@@ -68,11 +68,11 @@ class DataCompatibilityTest < ActiveSupport::TestCase
     assert_equal 2, user.materials.count
     assert_equal 1, user.products.count
     assert_equal 2, user.units.count
-    
+
     # 材料数量の確認
     assert_equal 1, material_flour.material_quantities.count
     assert_equal 1, material_milk.material_quantities.count
-    
+
     # 製品原材料の確認
     assert_equal 2, product.product_ingredients.count
     assert_equal 2, product.materials.count
@@ -91,22 +91,22 @@ class DataCompatibilityTest < ActiveSupport::TestCase
 
   test "validates required fields like legacy application" do
     user = User.create!(email: "test@example.com", password: "password123", password_confirmation: "password123")
-    
+
     # ユーザーなしでは材料を作成できない
     material = Material.new(name: "テスト材料", price: 100.0)
     assert_not material.valid?
     assert_includes material.errors[:user], "must exist"
-    
+
     # 名前なしでは材料を作成できない
     material = Material.new(user: user, price: 100.0)
     assert_not material.valid?
     assert_includes material.errors[:name], "can't be blank"
-    
+
     # 価格なしでは材料を作成できない
     material = Material.new(user: user, name: "テスト材料")
     assert_not material.valid?
     assert_includes material.errors[:price], "can't be blank"
-    
+
     # 負の価格では材料を作成できない
     material = Material.new(user: user, name: "テスト材料", price: -10.0)
     assert_not material.valid?
@@ -118,13 +118,13 @@ class DataCompatibilityTest < ActiveSupport::TestCase
     unit = Unit.create!(name: "g", user: user)
     material = Material.create!(name: "材料", price: 100.0, user: user)
     product = Product.create!(name: "製品", count: 1.0, user: user)
-    
+
     material_quantity = MaterialQuantity.create!(
       count: 100.0,
       unit: unit,
       material: material
     )
-    
+
     product_ingredient = ProductIngredient.create!(
       product: product,
       material: material,
@@ -136,12 +136,12 @@ class DataCompatibilityTest < ActiveSupport::TestCase
     material.destroy
     assert_not MaterialQuantity.exists?(material_quantity.id)
     assert_not ProductIngredient.exists?(product_ingredient.id)
-    
+
     # ユーザーを削除すると全関連データが削除される
     unit_id = unit.id
     product_id = product.id
     user.destroy
-    
+
     assert_not Unit.exists?(unit_id)
     assert_not Product.exists?(product_id)
   end

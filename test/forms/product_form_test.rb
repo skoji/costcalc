@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class ProductFormTest < ActiveSupport::TestCase
   def setup
@@ -6,7 +6,7 @@ class ProductFormTest < ActiveSupport::TestCase
     @unit_g = Unit.create!(name: "g", user: @user)
     @unit_kg = Unit.create!(name: "kg", user: @user)
     @material = Material.create!(name: "小麦粉", price: 300.0, user: @user)
-    
+
     # MaterialQuantityを作成してコスト計算を可能にする
     MaterialQuantity.create!(
       material: @material,
@@ -26,7 +26,7 @@ class ProductFormTest < ActiveSupport::TestCase
       product_name: "テストケーキ",
       product_count: 8.0
     )
-    
+
     assert_equal "テストケーキ", form.product_name
     assert_equal 8.0, form.product_count
   end
@@ -38,7 +38,7 @@ class ProductFormTest < ActiveSupport::TestCase
       unit_id: @unit_g.id,
       ingredient_count: 200.0
     )
-    
+
     form.add_product_ingredient(ingredient_form)
     assert_equal 1, form.product_ingredients.count
   end
@@ -55,19 +55,19 @@ class ProductFormTest < ActiveSupport::TestCase
         }
       }
     )
-    
-    assert_difference 'Product.count', 1 do
-      assert_difference 'ProductIngredient.count', 1 do
+
+    assert_difference "Product.count", 1 do
+      assert_difference "ProductIngredient.count", 1 do
         form.persist!(@user)
       end
     end
-    
+
     product = form.product
     assert_equal "テストケーキ", product.name
     assert_equal 8.0, product.count
     assert_equal @user, product.user
     assert_equal 1, product.product_ingredients.count
-    
+
     ingredient = product.product_ingredients.first
     assert_equal @material, ingredient.material
     assert_equal @unit_g, ingredient.unit
@@ -80,21 +80,21 @@ class ProductFormTest < ActiveSupport::TestCase
       count: 6.0,
       user: @user
     )
-    
+
     ProductIngredient.create!(
       product: product,
       material: @material,
       unit: @unit_g,
       count: 150.0
     )
-    
+
     form = ProductForm.new(id: product.id)
-    
+
     assert form.persisted?
     assert_equal "既存製品", form.product_name
     assert_equal 6.0, form.product_count
     assert_equal 1, form.product_ingredients.count
-    
+
     ingredient_form = form.product_ingredients.first
     assert_equal @material.id, ingredient_form.material_id
     assert_equal @unit_g.id, ingredient_form.unit_id
@@ -107,7 +107,7 @@ class ProductFormTest < ActiveSupport::TestCase
       count: 6.0,
       user: @user
     )
-    
+
     form = ProductForm.new(
       id: product.id,
       product_name: "更新製品",
@@ -120,11 +120,11 @@ class ProductFormTest < ActiveSupport::TestCase
         }
       }
     )
-    
-    assert_no_difference 'Product.count' do
+
+    assert_no_difference "Product.count" do
       form.persist!(@user)
     end
-    
+
     product.reload
     assert_equal "更新製品", product.name
     assert_equal 10.0, product.count

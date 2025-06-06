@@ -1,13 +1,13 @@
 class ProductForm
   include ActiveModel::Model
   include ActiveModel::Attributes
-  
+
   attr_reader :product
-  
+
   attribute :product_name, :string
   attribute :product_count, :decimal
   attribute :id, :integer
-  
+
   def product_ingredients
     @product_ingredients ||= []
   end
@@ -46,9 +46,9 @@ class ProductForm
         @product_ingredients = []
       end
     end
-    
+
     super(attr)
-    
+
     self.product_name ||= @product.name
     self.product_count ||= @product.count
   end
@@ -57,22 +57,22 @@ class ProductForm
     @product.user = current_user
     @product.name = product_name
     @product.count = product_count
-    
+
     # 既存の ingredients を削除
     @product.product_ingredients.destroy_all if @product.persisted?
-    
+
     # 新しい ingredients を追加
     @product_ingredients.each do |p|
       p.persist!(@product)
     end
-    
+
     @product.save!
   end
-  
+
   def to_key
-    [@product&.id]
+    [ @product&.id ]
   end
-  
+
   def to_param
     @product&.id&.to_s
   end

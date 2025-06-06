@@ -6,16 +6,16 @@ class LegacyDataMigrationTest < ActiveSupport::TestCase
   self.fixture_sets = []
   test "can import legacy-style fixture data" do
     # 既存アプリケーションのfixtureと同等のデータ構造をテスト
-    
+
     # ユーザー作成（Deviseスタイル）
     user1 = User.create!(
       email: "legacy_user1@example.com",
       password: "password123",
       password_confirmation: "password123"
     )
-    
+
     user2 = User.create!(
-      email: "legacy_user2@example.com", 
+      email: "legacy_user2@example.com",
       password: "password123",
       password_confirmation: "password123"
     )
@@ -30,7 +30,7 @@ class LegacyDataMigrationTest < ActiveSupport::TestCase
       price: 200.0,
       user: user1
     )
-    
+
     material2 = Material.create!(
       name: "牛乳",
       price: 180.0,
@@ -43,7 +43,7 @@ class LegacyDataMigrationTest < ActiveSupport::TestCase
       unit: unit1,
       material: material1
     )
-    
+
     mq2 = MaterialQuantity.create!(
       count: 1000.0,  # 1L = 1000ml
       unit: unit2,
@@ -56,7 +56,7 @@ class LegacyDataMigrationTest < ActiveSupport::TestCase
       count: 10.0,
       user: user1
     )
-    
+
     product2 = Product.create!(
       name: "カスタードプリン",
       count: 5.0,
@@ -70,7 +70,7 @@ class LegacyDataMigrationTest < ActiveSupport::TestCase
       unit: unit1,
       count: 200.0  # 200g
     )
-    
+
     pi2 = ProductIngredient.create!(
       product: product2,
       material: material2,
@@ -79,22 +79,22 @@ class LegacyDataMigrationTest < ActiveSupport::TestCase
     )
 
     # データ整合性の確認（fixtureで作成されたデータも含むため、created_userのみをカウント）
-    created_users = [user1, user2]
+    created_users = [ user1, user2 ]
     assert_equal 2, created_users.count
     assert_equal 2, created_users.sum { |u| u.units.count }
     assert_equal 2, created_users.sum { |u| u.materials.count }
-    assert_equal 2, MaterialQuantity.where(material: [material1, material2]).count
+    assert_equal 2, MaterialQuantity.where(material: [ material1, material2 ]).count
     assert_equal 2, created_users.sum { |u| u.products.count }
-    assert_equal 2, ProductIngredient.where(product: [product1, product2]).count
+    assert_equal 2, ProductIngredient.where(product: [ product1, product2 ]).count
 
     # 関連の確認
     assert_equal user1, material1.user
     assert_equal user1, unit1.user
     assert_equal user1, product1.user
-    
+
     assert_equal material1, mq1.material
     assert_equal unit1, mq1.unit
-    
+
     assert_equal product1, pi1.product
     assert_equal material1, pi1.material
     assert_equal unit1, pi1.unit
@@ -108,11 +108,11 @@ class LegacyDataMigrationTest < ActiveSupport::TestCase
   test "handles edge cases like legacy application" do
     user = User.create!(email: "edge_test@example.com", password: "password123", password_confirmation: "password123")
     unit = Unit.create!(name: "g", user: user)
-    
+
     # ゼロ価格の材料
     material_free = Material.create!(name: "無料材料", price: 0.0, user: user)
     MaterialQuantity.create!(count: 100.0, unit: unit, material: material_free)
-    
+
     product = Product.create!(name: "テスト製品", count: 1.0, user: user)
     ProductIngredient.create!(
       product: product,
@@ -120,7 +120,7 @@ class LegacyDataMigrationTest < ActiveSupport::TestCase
       unit: unit,
       count: 50.0
     )
-    
+
     # ゼロ価格でも正常に動作することを確認
     assert_equal 0.0, product.total_cost
     assert_equal 0.0, product.cost_per_unit
@@ -129,26 +129,26 @@ class LegacyDataMigrationTest < ActiveSupport::TestCase
   test "supports float precision like legacy database" do
     user = User.create!(email: "precision_test@example.com", password: "password123", password_confirmation: "password123")
     unit = Unit.create!(name: "g", user: user)
-    
+
     # 小数点以下の価格をテスト
     material = Material.create!(
       name: "高級材料",
       price: 123.456789,  # 6桁精度
       user: user
     )
-    
+
     MaterialQuantity.create!(
       count: 333.333333,  # 6桁精度
       unit: unit,
       material: material
     )
-    
+
     product = Product.create!(
       name: "精密製品",
       count: 7.777777,  # 6桁精度
       user: user
     )
-    
+
     ProductIngredient.create!(
       product: product,
       material: material,
@@ -170,17 +170,17 @@ class LegacyDataMigrationTest < ActiveSupport::TestCase
     # マルチテナント機能のテスト
     user1 = User.create!(email: "isolation_user1@example.com", password: "password123", password_confirmation: "password123")
     user2 = User.create!(email: "isolation_user2@example.com", password: "password123", password_confirmation: "password123")
-    
+
     # 同じ名前の材料を異なるユーザーで作成
     material1 = Material.create!(name: "共通材料", price: 100.0, user: user1)
     material2 = Material.create!(name: "共通材料", price: 200.0, user: user2)
-    
+
     # ユーザーごとに分離されていることを確認
     assert_equal 1, user1.materials.count
     assert_equal 1, user2.materials.count
-    assert_equal [material1], user1.materials.to_a
-    assert_equal [material2], user2.materials.to_a
-    
+    assert_equal [ material1 ], user1.materials.to_a
+    assert_equal [ material2 ], user2.materials.to_a
+
     # 価格も独立していることを確認
     assert_equal 100.0, user1.materials.first.price
     assert_equal 200.0, user2.materials.first.price
