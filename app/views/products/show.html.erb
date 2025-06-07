@@ -1,4 +1,10 @@
 <div class="container mx-auto px-4">
+  <!-- 上部のナビゲーション -->
+  <div class="mb-4">
+    <%= link_to "← 製品一覧に戻る", products_path(anchor: "product-#{@product.id}"), 
+        class: "text-blue-600 hover:text-blue-800" %>
+  </div>
+  
   <div class="flex justify-between items-center mb-6">
     <h1 class="text-3xl font-bold"><%= @product.name %></h1>
     <%= link_to "編集", edit_product_path(@product), 
@@ -55,7 +61,7 @@
   </div>
   
   <div class="mt-6">
-    <%= link_to "← 製品一覧に戻る", products_path, 
+    <%= link_to "← 製品一覧に戻る", products_path(anchor: "product-#{@product.id}"), 
         class: "text-blue-600 hover:text-blue-800" %>
   </div>
 </div>

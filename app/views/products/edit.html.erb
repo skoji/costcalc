@@ -124,7 +124,7 @@
         <%= form.submit '更新', class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
         <%= link_to "詳細を見る", product_path(@product_form.product), 
             class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" %>
-        <%= link_to "キャンセル", product_path(@product_form.product), 
+        <%= link_to "キャンセル", products_path(anchor: "product-#{@product_form.product.id}"), 
             class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" %>
         <%= link_to "削除", product_path(@product_form.product), 
             data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, 

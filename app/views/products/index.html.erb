@@ -8,7 +8,7 @@
   <hr class="mb-6" />
   
   <!-- 検索機能 -->
-  <div data-controller="search">
+  <div data-controller="search product-list">
     <div class="mb-6">
       <div class="flex gap-2">
         <input type="text" 
@@ -24,7 +24,7 @@
       </div>
     </div>
     <% @products.each do |product| %>
-      <div class="bg-white shadow-md rounded-lg p-6 mb-6" data-search-target="item">
+      <div id="product-<%= product.id %>" class="bg-white shadow-md rounded-lg p-6 mb-6" data-search-target="item">
         <h2 class="text-2xl font-semibold text-gray-800 mb-4"><%= product.name %></h2>
         
         <% if product.invalid_cost %>
