@@ -13,7 +13,8 @@ class ProductForm
   end
 
   def product_ingredients_attributes=(attributes)
-    @product_ingredients = attributes.map do |_i, attribute|
+    attrs = attributes.respond_to?(:to_h) ? attributes.to_h : attributes
+    @product_ingredients = attrs.map do |_i, attribute|
       ProductIngredientForm.new(attribute)
     end
   end
@@ -30,7 +31,9 @@ class ProductForm
     if attr[:id].present?
       @product = Product.find(attr[:id])
       if attr[:product_ingredients_attributes]
-        @product_ingredients = attr[:product_ingredients_attributes].map do |_i, p|
+        ingredients_attrs = attr[:product_ingredients_attributes]
+        ingredients_attrs = ingredients_attrs.to_h if ingredients_attrs.respond_to?(:to_h)
+        @product_ingredients = ingredients_attrs.map do |_i, p|
           ProductIngredientForm.new(p)
         end
       else
@@ -39,7 +42,9 @@ class ProductForm
     else
       @product = Product.new
       if attr[:product_ingredients_attributes]
-        @product_ingredients = attr[:product_ingredients_attributes].map do |_i, p|
+        ingredients_attrs = attr[:product_ingredients_attributes]
+        ingredients_attrs = ingredients_attrs.to_h if ingredients_attrs.respond_to?(:to_h)
+        @product_ingredients = ingredients_attrs.map do |_i, p|
           ProductIngredientForm.new(p)
         end
       else

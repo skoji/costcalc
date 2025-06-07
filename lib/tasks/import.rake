@@ -44,16 +44,18 @@ namespace :import do
       puts "Importing users..."
       users_sql = "SELECT * FROM users ORDER BY id"
       legacy_db.execute(users_sql) do |row|
-        User.create!(
+        user = User.new(
           id: row["id"],
           email: row["email"],
-          encrypted_password: row["encrypted_password"],
           reset_password_token: row["reset_password_token"],
           reset_password_sent_at: row["reset_password_sent_at"] ? Time.parse(row["reset_password_sent_at"]) : nil,
           remember_created_at: row["remember_created_at"] ? Time.parse(row["remember_created_at"]) : nil,
           created_at: Time.parse(row["created_at"]),
           updated_at: Time.parse(row["updated_at"])
         )
+        # encrypted_passwordを直接設定
+        user.encrypted_password = row["encrypted_password"]
+        user.save!(validate: false)
       end
       puts "Imported #{User.count} users"
 

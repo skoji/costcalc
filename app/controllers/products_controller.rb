@@ -14,7 +14,6 @@ class ProductsController < ApplicationController
       @product_form = ProductForm.new(product_form_params)
       @product_form.add_product_ingredient(ProductIngredientForm.new)
       render :new, status: :unprocessable_entity
-      nil
     else
       @product_form = ProductForm.new(product_form_params)
       begin
@@ -37,7 +36,6 @@ class ProductsController < ApplicationController
       @product_form = ProductForm.new(product_form_params)
       @product_form.add_product_ingredient(ProductIngredientForm.new)
       render :edit, status: :unprocessable_entity
-      nil
     else
       @product_form = ProductForm.new(product_form_params)
       begin
