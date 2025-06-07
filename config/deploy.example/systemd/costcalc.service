@@ -1,0 +1,38 @@
+[Unit]
+Description=Costcalc Puma Server
+After=network.target
+
+[Service]
+Type=simple
+User=deploy
+WorkingDirectory=/var/www/costcalc/current
+
+# 環境変数
+Environment="RAILS_ENV=production"
+Environment="RAILS_LOG_TO_STDOUT=true"
+Environment="RAILS_SERVE_STATIC_FILES=true"
+
+# 環境変数ファイルを読み込む（存在する場合）
+EnvironmentFile=-/var/www/costcalc/current/.env.production.local
+
+# Pumaの起動
+ExecStart=/usr/local/bin/bundle exec puma -C config/puma.rb
+ExecStop=/usr/local/bin/bundle exec pumactl -S /var/www/costcalc/shared/tmp/pids/puma.state stop
+
+# 自動再起動設定
+Restart=always
+RestartSec=3
+
+# プロセスの制限
+# メモリ制限（必要に応じて調整）
+MemoryLimit=512M
+
+# ファイルディスクリプタ制限
+LimitNOFILE=65536
+
+# 標準出力/エラー出力をjournalに送る
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

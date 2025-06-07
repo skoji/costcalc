@@ -1,0 +1,76 @@
+# fly.toml app configuration file
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+
+app = "costcalc-yourname"  # アプリ名を変更してください
+primary_region = "nrt"     # 東京リージョン
+
+[build]
+  [build.args]
+    RUBY_VERSION = "3.4.3"
+
+[deploy]
+  release_command = "bin/rails db:migrate"
+
+[env]
+  PORT = "3000"
+  RAILS_ENV = "production"
+  RAILS_LOG_TO_STDOUT = "true"
+  RAILS_SERVE_STATIC_FILES = "true"
+  # SQLiteのWALモードを有効化（パフォーマンス向上）
+  DATABASE_URL = "sqlite3:///rails/storage/production.sqlite3?mode=wal"
+
+[experimental]
+  auto_rollback = true
+
+[[services]]
+  http_checks = []
+  internal_port = 3000
+  processes = ["app"]
+  protocol = "tcp"
+  script_checks = []
+
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+    type = "connections"
+
+  [[services.ports]]
+    force_https = true
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+  [[services.tcp_checks]]
+    grace_period = "1s"
+    interval = "15s"
+    restart_limit = 0
+    timeout = "2s"
+
+  [[services.http_checks]]
+    interval = 10000
+    grace_period = "5s"
+    method = "get"
+    path = "/up"
+    protocol = "http"
+    restart_limit = 0
+    timeout = 2000
+    tls_skip_verify = false
+
+# 永続ボリューム（SQLiteデータベースとアップロードファイル用）
+[[mounts]]
+  destination = "/rails/storage"
+  source = "costcalc_storage"
+
+# ヘルスチェック
+[checks]
+  [checks.health]
+    grace_period = "10s"
+    interval = "30s"
+    method = "GET"
+    path = "/up"
+    port = 3000
+    timeout = "5s"
+    type = "http"

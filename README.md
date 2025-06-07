@@ -113,6 +113,195 @@ User (ユーザー)
 - **テスト**: Minitest
 - **デプロイ**: Kamal (Docker)
 
+## デプロイメント
+
+このアプリケーションは複数の方法でデプロイ可能です。
+
+### 方法1: 既存VPSへの相乗りデプロイ（nginx + Puma）
+
+既存のVPSに他のサービスと共存させる形でデプロイする方法です。
+
+#### 前提条件
+- Ubuntu 20.04以上
+- Ruby 3.4.3
+- nginx
+- systemd
+- SQLite3
+
+#### セットアップ手順
+
+1. **アプリケーションディレクトリの準備**
+```bash
+sudo mkdir -p /var/www/costcalc
+sudo chown deploy:deploy /var/www/costcalc
+cd /var/www/costcalc
+git clone https://github.com/yourusername/costcalc.git current
+mkdir -p shared/sockets shared/log shared/tmp/pids shared/storage
+```
+
+2. **設定ファイルのコピーと編集**
+```bash
+# nginx設定
+sudo cp current/config/deploy.example/nginx/costcalc.conf /etc/nginx/sites-available/
+sudo ln -s /etc/nginx/sites-available/costcalc.conf /etc/nginx/sites-enabled/
+# server_nameを実際のドメインに変更
+
+# systemd設定
+sudo cp current/config/deploy.example/systemd/costcalc.service /etc/systemd/system/
+# 必要に応じてパスやユーザー名を調整
+```
+
+3. **環境変数の設定**
+```bash
+cd /var/www/costcalc/current
+cp .env.example .env.production.local
+# 編集して必要な値を設定（特にRAILS_MASTER_KEY）
+```
+
+4. **初回セットアップ**
+```bash
+bundle install --deployment --without development test
+RAILS_ENV=production bundle exec rails db:create db:migrate
+RAILS_ENV=production bundle exec rails assets:precompile
+```
+
+5. **サービスの開始**
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable costcalc
+sudo systemctl start costcalc
+sudo nginx -s reload
+```
+
+6. **デプロイ用スクリプトの設定（オプション）**
+```bash
+# デプロイスクリプトをコピー
+cp config/deploy.example/scripts/deploy.sh /var/www/costcalc/
+chmod +x /var/www/costcalc/deploy.sh
+# 必要に応じてスクリプトの設定値を編集
+
+# 今後のデプロイは以下で実行
+/var/www/costcalc/deploy.sh
+```
+
+### 方法2: Fly.io へのデプロイ
+
+Fly.ioは分散型のアプリケーションプラットフォームで、SQLiteアプリケーションに最適です。
+
+#### 前提条件
+- Fly CLIのインストール: https://fly.io/docs/hands-on/install-flyctl/
+- Fly.ioアカウント
+
+#### セットアップ手順
+
+1. **Fly.ioへのログイン**
+```bash
+fly auth login
+```
+
+2. **アプリケーションの作成**
+```bash
+cp fly.toml.example fly.toml
+# appの値をユニークな名前に変更（例: costcalc-yourname）
+fly apps create costcalc-yourname
+```
+
+3. **シークレットの設定**
+```bash
+fly secrets set RAILS_MASTER_KEY=$(cat config/master.key)
+```
+
+4. **ボリュームの作成**（データ永続化用）
+```bash
+fly volumes create costcalc_storage --region nrt --size 1
+```
+
+5. **デプロイ**
+```bash
+fly deploy
+```
+
+6. **データベースのセットアップ**
+```bash
+fly ssh console -C "bin/rails db:migrate"
+```
+
+7. **データベースの初期化（必要な場合）**
+```bash
+fly ssh console -C "bin/rails db:seed"
+```
+
+### 方法3: Kamal を使用したDockerデプロイ
+
+詳細は[Kamal公式ドキュメント](https://kamal-deploy.org/)を参照してください。
+基本的な設定は`config/deploy.yml`に含まれています。
+
+### データベースバックアップ
+
+#### SQLiteの場合
+
+1. **手動バックアップ**
+```bash
+# 本番データベースのバックアップ
+sqlite3 storage/production.sqlite3 ".backup storage/backup_$(date +%Y%m%d).sqlite3"
+
+# リストア方法
+cp storage/backup_20241206.sqlite3 storage/production.sqlite3
+```
+
+2. **自動バックアップの設定（VPS環境）**
+```bash
+# バックアップスクリプトを設置
+sudo cp config/deploy.example/scripts/backup.sh /usr/local/bin/costcalc-backup
+sudo chmod +x /usr/local/bin/costcalc-backup
+
+# cronジョブの設定
+sudo cp config/deploy.example/cron/costcalc-backup /etc/cron.d/
+sudo chmod 644 /etc/cron.d/costcalc-backup
+```
+
+3. **Fly.ioでのバックアップ**
+```bash
+# スナップショットの作成
+fly volumes snapshots create vol_xxxxx
+
+# スナップショット一覧
+fly volumes snapshots list vol_xxxxx
+
+# ローカルへのダウンロード
+fly ssh console -C "cat /rails/storage/production.sqlite3" > backup.sqlite3
+```
+
+### バックアップのベストプラクティス
+
+1. **3-2-1ルール**
+   - 3つのコピー（本番 + バックアップ2つ）
+   - 2つの異なるメディア（ローカル + クラウド）
+   - 1つはオフサイト（別の場所）
+
+2. **定期的なリストアテスト**
+   - 月1回はバックアップからのリストアをテスト
+   - 手順書を最新に保つ
+
+3. **監視**
+   - バックアップジョブの成功/失敗を監視
+   - ディスク容量の監視
+
+### 本番環境での注意事項
+
+1. **セキュリティ**
+   - 必ず`RAILS_MASTER_KEY`を設定してください
+   - 本番環境では強力なパスワードポリシーを設定してください
+   - 定期的にセキュリティアップデートを適用してください
+
+2. **パフォーマンス**
+   - 必要に応じて`config/puma.rb`のワーカー数を調整してください
+   - nginxのキャッシュ設定を適切に行ってください
+
+3. **監視**
+   - アプリケーションログを定期的に確認してください
+   - システムリソース（CPU、メモリ、ディスク）を監視してください
+
 ## 本番環境への移行
 
 1. 既存のcostcalc-legacyアプリケーションを停止

@@ -35,3 +35,8 @@
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# Deployment configurations
+config/deploy.local/
+fly.toml
+.env.production.local
