@@ -101,7 +101,33 @@ export default class extends Controller {
       this.setupSearchInput(searchInput)
     }
     
+    // Auto-scroll to the new ingredient row
+    this.scrollToNewIngredient(newRow)
+    
     this.nextIndex++
+  }
+  
+  scrollToNewIngredient(newRow) {
+    // Wait a moment for the DOM to update
+    setTimeout(() => {
+      // Check if the new row is visible in the viewport
+      const rowRect = newRow.getBoundingClientRect()
+      const viewportHeight = window.innerHeight
+      
+      // If the bottom of the row is below the viewport, scroll to it
+      if (rowRect.bottom > viewportHeight - 100) { // 100px margin for better UX
+        newRow.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' 
+        })
+      }
+      
+      // Focus on the material search input for immediate use
+      const searchInput = newRow.querySelector('.material-search-input')
+      if (searchInput) {
+        searchInput.focus()
+      }
+    }, 100)
   }
   
   removeIngredient(event) {
