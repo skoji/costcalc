@@ -2,6 +2,18 @@
   <h1 class="text-3xl font-bold mb-6">原材料編集</h1>
   
   <div class="bg-white shadow-md rounded-lg p-6">
+    <!-- デバッグ情報 -->
+    <% if Rails.env.development? %>
+      <div class="bg-gray-100 p-2 mb-4 text-xs">
+        <strong>Debug:</strong> 
+        Material: <%= @material_form.material.name %>, 
+        MaterialQuantities: <%= @material_form.material_quantities.length %>
+        <% @material_form.material_quantities.each_with_index do |mq, i| %>
+          <br>MQ[<%= i %>]: count=<%= mq.material_count %>, unit_id=<%= mq.unit_id %>
+        <% end %>
+      </div>
+    <% end %>
+    
     <%= form_with model: @material_form, url: material_path(@material_form.material), method: :patch, local: true, scope: :material_form, class: "space-y-6" do |form| %>
       
       <% if @material_form.errors.any? %>

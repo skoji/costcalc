@@ -60,16 +60,31 @@ class MaterialForm
       @material.price = material_price
 
       if @material.save
-        # 既存の material_quantities を削除
-        @material.material_quantities.destroy_all if @material.persisted?
+        # material_quantities の更新処理
+        # 既存のIDがあるものは更新、ないものは新規作成、削除されるものは削除
+        existing_ids = @material_quantities.map(&:id).compact
 
-        # 新しい material_quantities を作成
+        # 削除されるべき material_quantities を削除
+        @material.material_quantities.where.not(id: existing_ids).destroy_all if existing_ids.any?
+        @material.material_quantities.destroy_all if existing_ids.empty? && @material.material_quantities.any?
+
+        # 各 material_quantity を更新または作成
         @material_quantities.each do |mq_form|
           if mq_form.valid_for_persistence?
-            @material.material_quantities.create!(
-              count: mq_form.material_count,
-              unit_id: mq_form.unit_id
-            )
+            if mq_form.id.present?
+              # 既存レコードの更新
+              existing_mq = @material.material_quantities.find(mq_form.id)
+              existing_mq.update!(
+                count: mq_form.material_count,
+                unit_id: mq_form.unit_id
+              )
+            else
+              # 新規レコードの作成
+              @material.material_quantities.create!(
+                count: mq_form.material_count,
+                unit_id: mq_form.unit_id
+              )
+            end
           end
         end
 

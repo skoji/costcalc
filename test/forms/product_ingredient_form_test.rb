@@ -104,7 +104,9 @@ class ProductIngredientFormTest < ActiveSupport::TestCase
     form = ProductIngredientForm.new(ingredient)
     form.delete = "1"
 
-    assert_difference "ProductIngredient.count", -1 do
+    # Note: Deletion is now handled at ProductForm level, not here
+    # ProductIngredientForm.persist! now skips when delete = "1"
+    assert_no_difference "ProductIngredient.count" do
       form.persist!(@product)
     end
   end
@@ -117,6 +119,7 @@ class ProductIngredientFormTest < ActiveSupport::TestCase
       delete: "1"
     )
 
+    # Should not create ingredient when delete flag is set
     assert_no_difference "ProductIngredient.count" do
       form.persist!(@product)
     end

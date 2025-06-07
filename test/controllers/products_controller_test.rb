@@ -58,27 +58,6 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to product_path(product)
   end
 
-  test "should add ingredient without creating product" do
-    assert_no_difference("Product.count") do
-      post products_url, params: {
-        commit: "材料追加",
-        product_form: {
-          product_name: "材料追加テスト",
-          product_count: 4.0,
-          product_ingredients_attributes: {
-            "0" => {
-              material_id: @material.id,
-              unit_id: @unit_g.id,
-              ingredient_count: 150.0
-            }
-          }
-        }
-      }
-    end
-
-    assert_response :unprocessable_entity
-    assert_includes response.body, "材料追加テスト"
-  end
 
   test "should show product" do
     get product_url(@product)

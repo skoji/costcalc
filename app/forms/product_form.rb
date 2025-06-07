@@ -13,6 +13,8 @@ class ProductForm
   end
 
   def product_ingredients_attributes=(attributes)
+    return if attributes.blank?
+
     attrs = attributes.respond_to?(:to_h) ? attributes.to_h : attributes
     @product_ingredients = attrs.map do |_i, attribute|
       ProductIngredientForm.new(attribute)
@@ -28,34 +30,30 @@ class ProductForm
   end
 
   def initialize(attr = {})
-    if attr[:id].present?
-      @product = Product.find(attr[:id])
-      if attr[:product_ingredients_attributes]
-        ingredients_attrs = attr[:product_ingredients_attributes]
-        ingredients_attrs = ingredients_attrs.to_h if ingredients_attrs.respond_to?(:to_h)
-        @product_ingredients = ingredients_attrs.map do |_i, p|
-          ProductIngredientForm.new(p)
-        end
-      else
-        @product_ingredients = @product.product_ingredients.map { |q| ProductIngredientForm.new(q) }
-      end
-    else
-      @product = Product.new
-      if attr[:product_ingredients_attributes]
-        ingredients_attrs = attr[:product_ingredients_attributes]
-        ingredients_attrs = ingredients_attrs.to_h if ingredients_attrs.respond_to?(:to_h)
-        @product_ingredients = ingredients_attrs.map do |_i, p|
-          ProductIngredientForm.new(p)
-        end
-      else
-        @product_ingredients = []
-      end
-    end
-
+    # First set the attributes using ActiveModel::Model
     super(attr)
 
+    if attr[:id].present?
+      @product = Product.find(attr[:id])
+    else
+      @product = Product.new
+    end
+
+    # Set the basic attributes
     self.product_name ||= @product.name
     self.product_count ||= @product.count
+
+    # Handle product ingredients
+    if attr[:product_ingredients_attributes].present?
+      # Use the setter method which properly handles the attributes
+      self.product_ingredients_attributes = attr[:product_ingredients_attributes]
+    elsif @product.persisted?
+      # Load existing ingredients for editing
+      @product_ingredients = @product.product_ingredients.includes(:material, :unit).map { |pi| ProductIngredientForm.new(pi) }
+    else
+      # New product with no ingredients
+      @product_ingredients = []
+    end
   end
 
   def persist!(current_user)
@@ -63,15 +61,48 @@ class ProductForm
     @product.name = product_name
     @product.count = product_count
 
-    # 既存の ingredients を削除
-    @product.product_ingredients.destroy_all if @product.persisted?
+    ActiveRecord::Base.transaction do
+      @product.save!
 
-    # 新しい ingredients を追加
-    @product_ingredients.each do |p|
-      p.persist!(@product)
+      # Handle product ingredients - update, create, or delete as needed
+      if @product_ingredients.present?
+        # Delete ingredients that are marked for deletion or not in the form
+        @product.product_ingredients.each do |existing_ingredient|
+          ingredient_form = @product_ingredients.find { |pi| pi.id.to_s == existing_ingredient.id.to_s }
+          if ingredient_form.nil? || ingredient_form.delete == "1"
+            existing_ingredient.destroy
+          end
+        end
+
+        # Update or create ingredients
+        @product_ingredients.each do |ingredient_form|
+          next if ingredient_form.delete == "1"
+          next if ingredient_form.material_id.blank? || ingredient_form.ingredient_count.blank?
+
+          if ingredient_form.id.present?
+            # Update existing ingredient
+            existing = @product.product_ingredients.find_by(id: ingredient_form.id)
+            if existing
+              existing.update!(
+                material_id: ingredient_form.material_id,
+                count: ingredient_form.ingredient_count,
+                unit_id: ingredient_form.unit_id
+              )
+            end
+          else
+            # Create new ingredient
+            @product.product_ingredients.create!(
+              material_id: ingredient_form.material_id,
+              count: ingredient_form.ingredient_count,
+              unit_id: ingredient_form.unit_id
+            )
+          end
+        end
+      else
+        # If no ingredients provided, don't delete existing ones
+        # This preserves existing ingredients when form data is missing
+      end
     end
-
-    @product.save!
   end
 
   def to_key

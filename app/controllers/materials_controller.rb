@@ -26,11 +26,20 @@ class MaterialsController < ApplicationController
 
   def update
     material = current_user.materials.find(params[:id])
+
+    # デバッグ情報
+    Rails.logger.debug "=== Material Update Debug ==="
+    Rails.logger.debug "Params: #{params.inspect}"
+    Rails.logger.debug "material_form_params: #{material_form_params.inspect}"
+
     @material_form = MaterialForm.new(material_form_params.merge(id: material.id))
+
+    Rails.logger.debug "MaterialForm material_quantities count: #{@material_form.material_quantities.length}"
 
     if @material_form.save(current_user)
       redirect_to materials_path, notice: "材料が更新されました。"
     else
+      Rails.logger.debug "MaterialForm errors: #{@material_form.errors.full_messages}"
       render :edit, status: :unprocessable_entity
     end
   end

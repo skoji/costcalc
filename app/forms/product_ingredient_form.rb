@@ -35,9 +35,9 @@ class ProductIngredientForm
   end
 
   def persist!(product)
-    # 削除フラグが立っている場合
+    # 削除フラグが立っている場合は何もしない
+    # (削除処理はProductFormで行われる)
     if delete == "1"
-      @product_ingredient.destroy! if @product_ingredient.persisted?
       return
     end
 
@@ -50,10 +50,19 @@ class ProductIngredientForm
     unit = Unit.find_by(id: unit_id)
     return unless unit
 
-    @product_ingredient.material = material
-    @product_ingredient.unit = unit
-    @product_ingredient.count = ingredient_count
-    @product_ingredient.product = product
+    if @product_ingredient.new_record?
+      @product_ingredient = ProductIngredient.new(
+        material: material,
+        unit: unit,
+        count: ingredient_count,
+        product: product
+      )
+    else
+      @product_ingredient.material = material
+      @product_ingredient.unit = unit
+      @product_ingredient.count = ingredient_count
+      @product_ingredient.product = product
+    end
     @product_ingredient.save!
   end
 
