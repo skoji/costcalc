@@ -41,7 +41,7 @@ class ProductsTest < ApplicationSystemTestCase
     within ".ingredient-row", match: :first do
       fill_in "材料名を選択・入力", with: "小麦粉"
       fill_in "分量", with: "200"
-      select "g", from: "単位"
+      find(".unit-select").select("g")
     end
 
     # Add second ingredient
@@ -50,7 +50,7 @@ class ProductsTest < ApplicationSystemTestCase
     within all(".ingredient-row").last do
       fill_in "材料名を選択・入力", with: "砂糖"
       fill_in "分量", with: "50"
-      select "g", from: "単位"
+      find(".unit-select").select("g")
     end
 
     # Add third ingredient
@@ -59,7 +59,7 @@ class ProductsTest < ApplicationSystemTestCase
     within all(".ingredient-row").last do
       fill_in "材料名を選択・入力", with: "卵"
       fill_in "分量", with: "2"
-      select "個", from: "単位"
+      find(".unit-select").select("個")
     end
 
     click_button "新規登録"
@@ -104,7 +104,7 @@ class ProductsTest < ApplicationSystemTestCase
     within all(".ingredient-row").last do
       fill_in "材料名を選択・入力", with: "卵"
       fill_in "分量", with: "1"
-      select "個", from: "単位"
+      find(".unit-select").select("個")
     end
 
     click_button "更新"

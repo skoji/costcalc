@@ -24,7 +24,7 @@ class MaterialsTest < ApplicationSystemTestCase
 
     # Set the unit information
     fill_in "数量", with: "1000"
-    select "g", from: "単位"
+    find("select[name*='unit_id']").select("g")
 
     click_button "新規登録"
 
