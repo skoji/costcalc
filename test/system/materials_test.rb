@@ -17,16 +17,16 @@ class MaterialsTest < ApplicationSystemTestCase
   test "user can create a material with multiple units" do
     visit materials_path
 
-    click_on "材料追加"
+    click_on "Add Material"
 
-    fill_in "材料名", with: "小麦粉"
-    fill_in "価格 (円)", with: "200"
+    fill_in "Material Name", with: "小麦粉"
+    fill_in "Price (yen)", with: "200"
 
     # Set the unit information
-    fill_in "数量", with: "1000"
+    fill_in "Quantity", with: "1000"
     find("select[name*='unit_id']").select("g")
 
-    click_button "新規登録"
+    click_button "Create"
 
     assert_text "Material was successfully created."
     assert_text "小麦粉"
@@ -44,13 +44,13 @@ class MaterialsTest < ApplicationSystemTestCase
     visit materials_path
 
     within "#material-#{material.id}" do
-      click_on "編集"
+      click_on "Edit"
     end
 
-    fill_in "材料名", with: "上白糖"
-    fill_in "価格 (円)", with: "180"
+    fill_in "Material Name", with: "上白糖"
+    fill_in "Price (yen)", with: "180"
 
-    click_button "更新"
+    click_button "Update"
 
     assert_text "Material was successfully updated."
     assert_text "上白糖"
@@ -68,10 +68,10 @@ class MaterialsTest < ApplicationSystemTestCase
     visit edit_material_path(material)
 
     page.accept_confirm do
-      click_link "削除"
+      click_link "Delete"
     end
 
-    assert_text "Material was successfully destroyed."
+    assert_text "Material was successfully deleted."
     assert_no_text "塩"
   end
 
@@ -91,13 +91,13 @@ class MaterialsTest < ApplicationSystemTestCase
     visit materials_path
 
     # Search functionality
-    fill_in "材料名で検索...", with: "バター"
+    fill_in "Search by material name...", with: "バター"
 
     assert_text "バター"
     assert_no_text "オリーブオイル"
 
     # Clear search
-    click_on "クリア"
+    click_on "Clear"
 
     assert_text "バター"
     assert_text "マーガリン"

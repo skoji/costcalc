@@ -1,5 +1,5 @@
 <div class="container mx-auto px-4 max-w-4xl">
-  <h1 class="text-3xl font-bold mb-6">製品新規登録</h1>
+  <h1 class="text-3xl font-bold mb-6"><%= t('products.new.title') %></h1>
   
   <% if flash[:error] %>
     <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -18,13 +18,13 @@
       <!-- 基本情報 -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <%= form.label :product_name, "製品名", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= form.label :product_name, t('products.name'), class: "block text-sm font-medium text-gray-700 mb-1" %>
           <%= form.text_field :product_name, 
               class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
         </div>
 
         <div>
-          <%= form.label :product_count, "仕込み数", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= form.label :product_count, t('products.preparation_count'), class: "block text-sm font-medium text-gray-700 mb-1" %>
           <%= form.number_field :product_count, step: 0.1, 
               class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
         </div>
@@ -33,11 +33,11 @@
       <!-- 原材料セクション -->
       <div class="border-t pt-6">
         <div class="flex justify-between items-center mb-4">
-          <h3 class="text-lg font-semibold text-gray-800">原材料</h3>
+          <h3 class="text-lg font-semibold text-gray-800"><%= t('products.raw_materials') %></h3>
           <button type="button" 
                   data-action="click->product-form#addIngredient"
                   class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-sm">
-            材料追加
+            <%= t('products.add_material') %>
           </button>
         </div>
         
@@ -49,10 +49,10 @@
             
             <!-- 材料選択 -->
             <div class="col-span-4">
-              <label class="block text-xs text-gray-600 mb-1">材料名</label>
+              <label class="block text-xs text-gray-600 mb-1"><%= t('products.material_name') %></label>
               <input type="hidden" name="product_form[product_ingredients_attributes][0][material_id]" value="" class="material-id-input" />
               <input type="text" 
-                     placeholder="材料名を選択・入力" 
+                     placeholder="<%= t('products.select_material_placeholder') %>" 
                      class="material-search-input w-full px-2 py-1 border border-gray-300 rounded text-sm" 
                      data-index="0"
                      list="material-list-0" />
@@ -68,29 +68,29 @@
             
             <!-- 分量 -->
             <div class="col-span-2">
-              <label class="block text-xs text-gray-600 mb-1">分量</label>
+              <label class="block text-xs text-gray-600 mb-1"><%= t('products.quantity') %></label>
               <input type="number" 
                      name="product_form[product_ingredients_attributes][0][ingredient_count]"
                      step="0.1" 
-                     placeholder="分量"
+                     placeholder="<%= t('products.quantity') %>"
                      class="w-full px-2 py-1 border border-gray-300 rounded text-sm" />
             </div>
             
             <!-- 単位（材料に応じて絞り込み）-->
             <div class="col-span-3">
-              <label class="block text-xs text-gray-600 mb-1">単位</label>
+              <label class="block text-xs text-gray-600 mb-1"><%= t('materials.unit') %></label>
               <select name="product_form[product_ingredients_attributes][0][unit_id]"
                       class="unit-select w-full px-2 py-1 border border-gray-300 rounded text-sm">
-                <option value="">単位を選択</option>
+                <option value=""><%= t('materials.select_unit') %></option>
               </select>
             </div>
             
-            <!-- 削除ボタン -->
+            <!-- <%= t('common.delete') %>ボタン -->
             <div class="col-span-1 flex items-end">
               <button type="button" 
                       data-action="click->product-form#removeIngredient"
                       class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs w-full">
-                削除
+                <%= t('common.delete') %>
               </button>
             </div>
           </div>
@@ -101,15 +101,15 @@
           <button type="button" 
                   data-action="click->product-form#addIngredient"
                   class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-sm">
-            材料追加
+            <%= t('products.add_material') %>
           </button>
         </div>
       </div>
 
       <!-- アクションボタン -->
       <div class="flex space-x-4 pt-4 border-t">
-        <%= form.submit '新規登録', class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
-        <%= link_to "キャンセル", products_path, 
+        <%= form.submit t('common.create'), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+        <%= link_to t('common.cancel'), products_path, 
             class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" %>
       </div>
       
@@ -121,10 +121,10 @@
           
           <!-- 材料選択 -->
           <div class="col-span-4">
-            <label class="block text-xs text-gray-600 mb-1">材料名</label>
+            <label class="block text-xs text-gray-600 mb-1"><%= t('products.material_name') %></label>
             <input type="hidden" name="product_form[product_ingredients_attributes][__INDEX__][material_id]" value="" class="material-id-input" />
             <input type="text" 
-                   placeholder="材料名を選択・入力" 
+                   placeholder="<%= t('products.select_material_placeholder') %>" 
                    class="material-search-input w-full px-2 py-1 border border-gray-300 rounded text-sm" 
                    data-index="__INDEX__"
                    list="material-list-__INDEX__" />
@@ -140,29 +140,29 @@
           
           <!-- 分量 -->
           <div class="col-span-2">
-            <label class="block text-xs text-gray-600 mb-1">分量</label>
+            <label class="block text-xs text-gray-600 mb-1"><%= t('products.quantity') %></label>
             <input type="number" 
                    name="product_form[product_ingredients_attributes][__INDEX__][ingredient_count]"
                    step="0.1" 
-                   placeholder="分量"
+                   placeholder="<%= t('products.quantity') %>"
                    class="w-full px-2 py-1 border border-gray-300 rounded text-sm" />
           </div>
           
           <!-- 単位 -->
           <div class="col-span-3">
-            <label class="block text-xs text-gray-600 mb-1">単位</label>
+            <label class="block text-xs text-gray-600 mb-1"><%= t('materials.unit') %></label>
             <select name="product_form[product_ingredients_attributes][__INDEX__][unit_id]"
                     class="unit-select w-full px-2 py-1 border border-gray-300 rounded text-sm">
-              <option value="">単位を選択</option>
+              <option value=""><%= t('materials.select_unit') %></option>
             </select>
           </div>
           
-          <!-- 削除ボタン -->
+          <!-- <%= t('common.delete') %>ボタン -->
           <div class="col-span-1 flex items-end">
             <button type="button" 
                     data-action="click->product-form#removeIngredient"
                     class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs w-full">
-              削除
+              <%= t('common.delete') %>
             </button>
           </div>
         </div>

@@ -1,7 +1,7 @@
 <div class="container mx-auto px-4">
   <div class="flex justify-between items-center mb-6">
-    <h1 class="text-3xl font-bold">原材料</h1>
-    <%= link_to "材料追加", new_material_path, 
+    <h1 class="text-3xl font-bold"><%= t('materials.title') %></h1>
+    <%= link_to t('materials.add_material'), new_material_path, 
         class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
   </div>
   
@@ -12,14 +12,14 @@
     <div class="mb-6">
       <div class="flex gap-2">
         <input type="text" 
-               placeholder="材料名で検索..." 
+               placeholder="<%= t('materials.search_placeholder') %>" 
                data-search-target="input"
                data-action="input->search#filter"
                class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
         <button type="button" 
                 data-action="click->search#clear"
                 class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-          クリア
+          <%= t('common.clear') %>
         </button>
       </div>
     </div>
@@ -28,9 +28,9 @@
       <h2 class="text-2xl font-semibold text-gray-800 mb-4"><%= material.name %></h2>
       
       <ul class="space-y-2 text-gray-700">
-        <li><strong>価格:</strong> ¥<%= material.price %></li>
+        <li><strong><%= t('materials.price') %></strong> ¥<%= material.price %></li>
         <% if material.material_quantities.any? %>
-          <li><strong>数量:</strong> 
+          <li><strong><%= t('materials.quantity') %></strong> 
             <div class="ml-4">
               <% material.material_quantities.each do |quantity| %>
                 <div><%= quantity.count %> <%= quantity.unit.name %></div>
@@ -39,10 +39,10 @@
           </li>
         <% end %>
         <li class="pt-2 flex space-x-2">
-          <%= link_to "編集", edit_material_path(material), 
+          <%= link_to t('common.edit'), edit_material_path(material), 
               class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-sm" %>
-          <%= link_to "削除", material_path(material), 
-              data: { turbo_method: :delete, turbo_confirm: "削除しますか？" }, 
+          <%= link_to t('common.delete'), material_path(material), 
+              data: { turbo_method: :delete, turbo_confirm: t('common.confirm_delete') }, 
               class: "bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-sm" %>
         </li>
       </ul>
@@ -51,8 +51,8 @@
     
     <% if @materials.empty? %>
       <div class="text-center py-12">
-        <p class="text-gray-500 text-lg">まだ原材料が登録されていません。</p>
-        <%= link_to "最初の原材料を追加", new_material_path, 
+        <p class="text-gray-500 text-lg"><%= t('materials.no_materials') %></p>
+        <%= link_to t('materials.add_first_material'), new_material_path, 
             class: "mt-4 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
       </div>
     <% end %>

@@ -1,4 +1,96 @@
 ja:
+  navigation:
+    products: "製品"
+    materials: "材料"
+    settings: "設定"
+    logout: "ログアウト"
+    login: "ログイン"
+    sign_up: "新規登録"
+
+  common:
+    edit: "編集"
+    delete: "削除"
+    create: "新規登録"
+    update: "更新"
+    cancel: "キャンセル"
+    clear: "クリア"
+    details: "詳細"
+    back: "戻る"
+    back_to_list: "一覧に戻る"
+    confirm_delete: "削除しますか？"
+    confirm_delete_really: "本当に削除しますか？"
+    error_occurred: "エラーが発生しました:"
+    yen: "円"
+
+  materials:
+    title: "原材料"
+    add_material: "材料追加"
+    add_first_material: "最初の原材料を追加"
+    no_materials: "まだ原材料が登録されていません。"
+    search_placeholder: "材料名で検索..."
+    name: "材料名"
+    name_label: "名前:"
+    price: "価格:"
+    price_label: "価格:"
+    price_yen: "価格 (円)"
+    quantity: "数量:"
+    purchase_unit: "購入単位"
+    purchase_unit_description: "上記の価格がどの単位あたりの価格か指定してください"
+    unit: "単位"
+    select_unit: "単位を選択"
+    per: "で"
+    new:
+      title: "原材料新規登録"
+    edit:
+      title: "原材料編集"
+    show:
+      title: "材料詳細"
+
+  products:
+    title: "製品"
+    add_product: "製品追加"
+    name: "製品名"
+    preparation_count: "仕込み数"
+    raw_materials: "原材料"
+    add_material: "材料追加"
+    material_name: "材料名"
+    select_material_placeholder: "材料名を選択・入力"
+    quantity: "分量"
+    amount: "分量"
+    add_first_product: "最初の製品を追加"
+    no_products: "まだ製品が登録されていません。"
+    search_placeholder: "製品名で検索..."
+    new:
+      title: "製品新規登録"
+    edit:
+      title: "製品編集"
+    preparation_amount: "仕込み量:"
+    preparation_amount_label: "仕込み数:"
+    cost: "原価"
+    cost_per_unit: "１つあたり原価"
+    cost_ratio_label: "原価"
+    cost_ratio_suffix: "%として:"
+    selling_price_as_cost_ratio: "原価%として:"
+    invalid_cost: "原材料の計算が正しく出来ていません"
+    no_raw_materials: "まだ原材料が登録されていません。"
+    edit_to_add_materials: "編集して原材料を追加"
+    material_price: "材料価格"
+    back_to_list: "← 製品一覧に戻る"
+    show:
+      title: "製品詳細"
+
+  flash:
+    material:
+      created: "材料が作成されました。"
+      updated: "材料が更新されました。"
+      destroyed: "材料が削除されました。"
+    product:
+      created: "製品が作成されました。"
+      updated: "製品が更新されました。"
+      destroyed: "製品が削除されました。"
+      create_failed: "製品の作成に失敗しました"
+      update_failed: "製品の更新に失敗しました"
+
   activerecord:
     errors:
       models:
@@ -16,16 +108,40 @@ ja:
         invalid: "の形式が正しくありません"
         taken: "はすでに使用されています"
         too_short: "は%{count}文字以上で入力してください"
-  flash:
-    material:
-      created: "材料が作成されました。"
-      updated: "材料が更新されました。"
-      destroyed: "材料が削除されました。"
-    product:
-      created: "製品が作成されました。"
-      updated: "製品が更新されました。"
-      destroyed: "製品が削除されました。"
+
   devise:
+    email: "メールアドレス"
+    password: "パスワード"
+    password_confirmation: "パスワード（確認）"
+    current_password: "現在のパスワード"
+    remember_me: "ログイン状態を保持する"
+    minimum_password_length: "文字以上"
+    profit_ratio: "原価率（小数）"
+    profit_ratio_example: "例: 0.3 = 30%、0.2 = 20%"
+    password_blank_note: "変更しない場合は空白のままにしてください"
+    current_password_note: "変更を確認するために現在のパスワードが必要です"
+    pending_reconfirmation: "確認待ち:"
+    sessions:
+      new:
+        title: "ログイン"
+        submit: "ログイン"
+    registrations:
+      new:
+        title: "新規登録"
+        submit: "登録"
+      edit:
+        title: "設定の編集"
+        submit: "更新"
+        delete_account: "アカウントの削除"
+        delete_account_button: "アカウントを削除"
+        confirm_delete: "本当にアカウントを削除しますか？"
+    shared:
+      links:
+        login: "ログイン"
+        sign_up: "新規登録"
+        forgot_password: "パスワードを忘れた方はこちら"
+        resend_confirmation: "確認メールが届かない方はこちら"
+        unlock_account: "アカウントロック解除はこちら"
     confirmations:
       confirmed: "メールアドレスが確認できました。"
       send_instructions: "アカウントの有効化について数分以内にメールでご連絡します。"

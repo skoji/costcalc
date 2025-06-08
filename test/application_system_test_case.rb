@@ -9,16 +9,17 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
   def setup
     super
-    # Keep default locale (English) for consistent testing
-    # UI labels are in Japanese but flash messages will be in English
+    # Force English locale for system tests
+    I18n.locale = :en
+    I18n.default_locale = :en
   end
 
   # Helper method to sign in users for system tests
   def sign_in_as(user)
     visit new_user_session_path
-    fill_in "メールアドレス", with: user.email
-    fill_in "パスワード", with: "password123"
-    click_button "ログイン"
+    fill_in "Email", with: user.email
+    fill_in "Password", with: "password123"
+    click_button "Login"
     assert_text "Signed in successfully."
   end
 end
