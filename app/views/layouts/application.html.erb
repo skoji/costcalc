@@ -70,11 +70,11 @@
           <% if user_signed_in? %>
             <div class="space-y-2">
               <%= link_to t('navigation.products'), products_path, 
-                  class: "block px-3 py-2 rounded text-blue-600 hover:bg-gray-100 font-medium #{'bg-gray-100 font-bold' if controller_name == 'products'}" %>
+                  class: "block px-3 py-2 rounded text-blue-600 hover:bg-gray-100 font-medium text-sm md:text-base #{'bg-gray-100 font-bold' if controller_name == 'products'}" %>
               <%= link_to t('navigation.materials'), materials_path, 
-                  class: "block px-3 py-2 rounded text-blue-600 hover:bg-gray-100 font-medium #{'bg-gray-100 font-bold' if controller_name == 'materials'}" %>
+                  class: "block px-3 py-2 rounded text-blue-600 hover:bg-gray-100 font-medium text-sm md:text-base #{'bg-gray-100 font-bold' if controller_name == 'materials'}" %>
               <%= link_to t('navigation.settings'), edit_user_registration_path, 
-                  class: "block px-3 py-2 rounded text-blue-600 hover:bg-gray-100 font-medium #{'bg-gray-100 font-bold' if controller_name == 'registrations'}" %>
+                  class: "block px-3 py-2 rounded text-blue-600 hover:bg-gray-100 font-medium text-sm md:text-base #{'bg-gray-100 font-bold' if controller_name == 'registrations'}" %>
               <div class="pt-2 mt-2 border-t">
                 <div class="text-sm text-gray-600 px-3 py-1"><%= current_user.email %></div>
                 <%= link_to t('navigation.logout'), destroy_user_session_path, 
@@ -85,9 +85,9 @@
           <% else %>
             <div class="space-y-2">
               <%= link_to t('navigation.login'), new_user_session_path, 
-                  class: "block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center" %>
+                  class: "block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center text-sm md:text-base" %>
               <%= link_to t('navigation.sign_up'), new_user_registration_path, 
-                  class: "block bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-center" %>
+                  class: "block bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-center text-sm md:text-base" %>
             </div>
           <% end %>
         </div>
