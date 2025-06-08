@@ -65,13 +65,13 @@
       </div>
 
       <!-- アクションボタン -->
-      <div class="flex space-x-4 pt-4 border-t">
-        <%= form.submit t('common.update'), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer" %>
+      <div class="grid grid-cols-2 md:flex gap-2 md:space-x-4 pt-4 border-t">
+        <%= form.submit t('common.update'), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 md:px-4 rounded cursor-pointer text-sm md:text-base text-center" %>
         <%= link_to t('common.cancel'), materials_path, 
-            class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" %>
+            class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-3 md:px-4 rounded text-sm md:text-base text-center" %>
         <%= link_to t('common.delete'), material_path(@material_form.material), 
             data: { turbo_method: :delete, turbo_confirm: t('common.confirm_delete') }, 
-            class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" %>
+            class: "col-span-2 md:col-span-1 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 md:px-4 rounded text-sm md:text-base text-center" %>
       </div>
     <% end %>
   </div>

@@ -45,12 +45,12 @@
         
         <div data-product-form-target="ingredientsContainer">
           <% @product_form.product_ingredients.each_with_index do |ingredient_form, index| %>
-            <div class="ingredient-row grid grid-cols-12 gap-2 mb-3 p-3 bg-gray-50 rounded">
+            <div class="ingredient-row grid grid-cols-1 md:grid-cols-12 gap-2 mb-3 p-3 bg-gray-50 rounded">
               <input type="hidden" name="product_form[product_ingredients_attributes][<%= index %>][id]" value="<%= ingredient_form.id %>" />
               <input type="hidden" name="product_form[product_ingredients_attributes][<%= index %>][delete]" value="0" class="destroy-input" />
               
               <!-- 材料選択 -->
-              <div class="col-span-4">
+              <div class="col-span-1 md:col-span-4">
                 <label class="block text-xs text-gray-600 mb-1"><%= t('products.material_name') %></label>
                 <input type="hidden" name="product_form[product_ingredients_attributes][<%= index %>][material_id]" value="<%= ingredient_form.material_id %>" class="material-id-input" />
                 <input type="text" 
@@ -70,7 +70,7 @@
               </div>
               
               <!-- 分量 -->
-              <div class="col-span-2">
+              <div class="col-span-1 md:col-span-2">
                 <label class="block text-xs text-gray-600 mb-1"><%= t('products.amount') %></label>
                 <input type="number" 
                        name="product_form[product_ingredients_attributes][<%= index %>][ingredient_count]"
@@ -81,7 +81,7 @@
               </div>
               
               <!-- 単位（材料に応じて絞り込み）-->
-              <div class="col-span-3">
+              <div class="col-span-1 md:col-span-3">
                 <label class="block text-xs text-gray-600 mb-1"><%= t('materials.unit') %></label>
                 <select name="product_form[product_ingredients_attributes][<%= index %>][unit_id]"
                         class="unit-select w-full px-2 py-1 border border-gray-300 rounded text-sm"
@@ -99,10 +99,10 @@
               </div>
               
               <!-- 削除ボタン -->
-              <div class="col-span-1 flex items-end">
+              <div class="col-span-1 md:col-span-2 justify-end flex items-end">
                 <button type="button" 
                         data-action="click->product-form#removeIngredient"
-                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs w-full">
+                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs">
                   <%= t('common.delete') %>
                 </button>
               </div>
@@ -121,25 +121,25 @@
       </div>
 
       <!-- アクションボタン -->
-      <div class="flex space-x-4 pt-4 border-t">
-        <%= form.submit t('common.update'), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+      <div class="grid grid-cols-2 md:flex gap-2 md:space-x-4 pt-4 border-t">
+        <%= form.submit t('common.update'), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 md:px-4 rounded text-sm md:text-base text-center" %>
         <%= link_to t('common.details'), product_path(@product_form.product), 
-            class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" %>
+            class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 md:px-4 rounded text-sm md:text-base text-center" %>
         <%= link_to t('common.cancel'), products_path(anchor: "product-#{@product_form.product.id}"), 
-            class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" %>
+            class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-3 md:px-4 rounded text-sm md:text-base text-center" %>
         <%= link_to t('common.delete'), product_path(@product_form.product), 
             data: { turbo_method: :delete, turbo_confirm: t('common.confirm_delete_really') }, 
-            class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" %>
+            class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 md:px-4 rounded text-sm md:text-base text-center" %>
       </div>
       
       <!-- Template for new ingredients -->
       <template data-product-form-target="ingredientTemplate">
-        <div class="ingredient-row grid grid-cols-12 gap-2 mb-3 p-3 bg-gray-50 rounded">
+        <div class="ingredient-row grid grid-cols-1 md:grid-cols-12 gap-2 mb-3 p-3 bg-gray-50 rounded">
           <input type="hidden" name="product_form[product_ingredients_attributes][__INDEX__][id]" value="" />
           <input type="hidden" name="product_form[product_ingredients_attributes][__INDEX__][delete]" value="0" class="destroy-input" />
           
           <!-- 材料選択 -->
-          <div class="col-span-4">
+          <div class="col-span-1 md:col-span-4">
             <label class="block text-xs text-gray-600 mb-1"><%= t('products.material_name') %></label>
             <input type="hidden" name="product_form[product_ingredients_attributes][__INDEX__][material_id]" value="" class="material-id-input" />
             <input type="text" 
@@ -158,7 +158,7 @@
           </div>
           
           <!-- 分量 -->
-          <div class="col-span-2">
+          <div class="col-span-1 md:col-span-2">
             <label class="block text-xs text-gray-600 mb-1"><%= t('products.amount') %></label>
             <input type="number" 
                    name="product_form[product_ingredients_attributes][__INDEX__][ingredient_count]"
@@ -168,7 +168,7 @@
           </div>
           
           <!-- 単位 -->
-          <div class="col-span-3">
+          <div class="col-span-1 md:col-span-3">
             <label class="block text-xs text-gray-600 mb-1"><%= t('materials.unit') %></label>
             <select name="product_form[product_ingredients_attributes][__INDEX__][unit_id]"
                     class="unit-select w-full px-2 py-1 border border-gray-300 rounded text-sm"
@@ -178,10 +178,10 @@
           </div>
           
           <!-- 削除ボタン -->
-          <div class="col-span-1 flex items-end">
+          <div class="col-span-1 md:col-span-2 justify-end flex items-end">
             <button type="button" 
                     data-action="click->product-form#removeIngredient"
-                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs w-full">
+                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs">
               <%= t('common.delete') %>
             </button>
           </div>

@@ -22,15 +22,16 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-gray-100">
+  <body class="bg-gray-100" data-controller="mobile-menu">
     <nav class="bg-white shadow mb-8">
-      <div class="container mx-auto px-6 py-3">
+      <div class="container mx-auto px-4 py-3">
         <div class="flex justify-between items-center">
           <div class="text-xl font-semibold text-gray-700">
             <%= link_to "CostCalc", root_path %>
           </div>
           
-          <div class="flex items-center space-x-4">
+          <!-- Desktop Navigation -->
+          <div class="hidden md:flex items-center space-x-4">
             <% if user_signed_in? %>
               <!-- Navigation links -->
               <nav class="flex space-x-4 mr-8">
@@ -47,14 +48,48 @@
               </span>
               <%= link_to t('navigation.logout'), destroy_user_session_path, 
                   data: { turbo_method: :delete }, 
-                  class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" %>
+                  class: "bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 md:py-2 md:px-4 rounded text-sm md:text-base" %>
             <% else %>
               <%= link_to t('navigation.login'), new_user_session_path, 
-                  class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+                  class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 md:py-2 md:px-4 rounded text-sm md:text-base" %>
               <%= link_to t('navigation.sign_up'), new_user_registration_path, 
-                  class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" %>
+                  class: "bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 md:py-2 md:px-4 rounded text-sm md:text-base" %>
             <% end %>
           </div>
+          
+          <!-- Mobile menu button -->
+          <button type="button" class="md:hidden" aria-label="Menu" aria-controls="mobile-menu" data-action="click->mobile-menu#toggle">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-16 6h16"></path>
+            </svg>
+          </button>
+        </div>
+        
+        <!-- Mobile Navigation -->
+        <div class="md:hidden hidden mt-3 pt-3 border-t" data-mobile-menu-target="menu">
+          <% if user_signed_in? %>
+            <div class="space-y-2">
+              <%= link_to t('navigation.products'), products_path, 
+                  class: "block px-3 py-2 rounded text-blue-600 hover:bg-gray-100 font-medium text-sm md:text-base #{'bg-gray-100 font-bold' if controller_name == 'products'}" %>
+              <%= link_to t('navigation.materials'), materials_path, 
+                  class: "block px-3 py-2 rounded text-blue-600 hover:bg-gray-100 font-medium text-sm md:text-base #{'bg-gray-100 font-bold' if controller_name == 'materials'}" %>
+              <%= link_to t('navigation.settings'), edit_user_registration_path, 
+                  class: "block px-3 py-2 rounded text-blue-600 hover:bg-gray-100 font-medium text-sm md:text-base #{'bg-gray-100 font-bold' if controller_name == 'registrations'}" %>
+              <div class="pt-2 mt-2 border-t">
+                <div class="text-sm text-gray-600 px-3 py-1"><%= current_user.email %></div>
+                <%= link_to t('navigation.logout'), destroy_user_session_path, 
+                    data: { turbo_method: :delete }, 
+                    class: "block mt-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-center" %>
+              </div>
+            </div>
+          <% else %>
+            <div class="space-y-2">
+              <%= link_to t('navigation.login'), new_user_session_path, 
+                  class: "block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center text-sm md:text-base" %>
+              <%= link_to t('navigation.sign_up'), new_user_registration_path, 
+                  class: "block bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-center text-sm md:text-base" %>
+            </div>
+          <% end %>
         </div>
       </div>
     </nav>
