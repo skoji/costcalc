@@ -160,7 +160,7 @@ class EndToEndTest < ApplicationSystemTestCase
     click_on "ログアウト"
     # Note: Flash message might not appear in CI environment
     # assert_text "Signed out successfully."
-    assert_current_path root_path
+    assert_current_path new_user_session_path
   end
 
   test "cost calculation updates when material prices change" do
