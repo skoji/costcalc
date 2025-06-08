@@ -152,7 +152,7 @@ sudo cp current/config/deploy.example/systemd/costcalc.service /etc/systemd/syst
 3. **環境変数の設定**
 ```bash
 cd /var/www/costcalc/current
-cp .env.example .env.production.local
+cp env.example .env.production.local
 # 編集して必要な値を設定（特にRAILS_MASTER_KEY）
 ```
 
