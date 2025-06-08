@@ -1,12 +1,30 @@
 <div class="container mx-auto px-4">
   <div class="flex justify-between items-center mb-6">
     <h1 class="text-3xl font-bold">原材料</h1>
-    <%= link_to "原材料追加", new_material_path, 
+    <%= link_to "材料追加", new_material_path, 
         class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
   </div>
   
-  <% @materials.each do |material| %>
-    <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+  <hr class="mb-6" />
+  
+  <!-- 検索機能 -->
+  <div data-controller="search">
+    <div class="mb-6">
+      <div class="flex gap-2">
+        <input type="text" 
+               placeholder="材料名で検索..." 
+               data-search-target="input"
+               data-action="input->search#filter"
+               class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+        <button type="button" 
+                data-action="click->search#clear"
+                class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+          クリア
+        </button>
+      </div>
+    </div>
+    <% @materials.each do |material| %>
+      <div id="material-<%= material.id %>" class="bg-white shadow-md rounded-lg p-6 mb-6" data-search-target="item">
       <h2 class="text-2xl font-semibold text-gray-800 mb-4"><%= material.name %></h2>
       
       <ul class="space-y-2 text-gray-700">
@@ -28,14 +46,15 @@
               class: "bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-sm" %>
         </li>
       </ul>
-    </div>
-  <% end %>
-  
-  <% if @materials.empty? %>
-    <div class="text-center py-12">
-      <p class="text-gray-500 text-lg">まだ原材料が登録されていません。</p>
-      <%= link_to "最初の原材料を追加", new_material_path, 
-          class: "mt-4 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
-    </div>
-  <% end %>
+      </div>
+    <% end %>
+    
+    <% if @materials.empty? %>
+      <div class="text-center py-12">
+        <p class="text-gray-500 text-lg">まだ原材料が登録されていません。</p>
+        <%= link_to "最初の原材料を追加", new_material_path, 
+            class: "mt-4 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+      </div>
+    <% end %>
+  </div>
 </div>

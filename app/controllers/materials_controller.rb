@@ -13,7 +13,7 @@ class MaterialsController < ApplicationController
     @material_form = MaterialForm.new(material_form_params)
 
     if @material_form.save(current_user)
-      redirect_to materials_path, notice: "材料が作成されました。"
+      redirect_to materials_path, notice: "Material was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -37,7 +37,7 @@ class MaterialsController < ApplicationController
     Rails.logger.debug "MaterialForm material_quantities count: #{@material_form.material_quantities.length}"
 
     if @material_form.save(current_user)
-      redirect_to materials_path, notice: "材料が更新されました。"
+      redirect_to materials_path, notice: "Material was successfully updated."
     else
       Rails.logger.debug "MaterialForm errors: #{@material_form.errors.full_messages}"
       render :edit, status: :unprocessable_entity
@@ -46,7 +46,7 @@ class MaterialsController < ApplicationController
 
   def destroy
     @material.destroy
-    redirect_to materials_path, notice: "材料が削除されました。"
+    redirect_to materials_path, notice: "Material was successfully destroyed."
   end
 
   def show
