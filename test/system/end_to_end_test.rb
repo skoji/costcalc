@@ -85,8 +85,8 @@ class EndToEndTest < ApplicationSystemTestCase
     within ".ingredient-row", match: :first do
       find("input.material-search-input").set("強力粉")
       find("input[name*='ingredient_count']").set("500")
-      # Wait for material selection to trigger unit filtering
-      sleep 0.5
+      # Wait for unit options to be updated after material selection
+      assert_selector ".unit-select option[value='#{unit_g.id}']"
       find(".unit-select").select("g")
     end
 
@@ -94,8 +94,8 @@ class EndToEndTest < ApplicationSystemTestCase
     within all(".ingredient-row").last do
       find("input.material-search-input").set("バター")
       find("input[name*='ingredient_count']").set("150")
-      # Wait for material selection to trigger unit filtering
-      sleep 0.5
+      # Wait for unit options to be updated after material selection
+      assert_selector ".unit-select option[value='#{unit_g.id}']"
       find(".unit-select").select("g")
     end
 
@@ -103,8 +103,8 @@ class EndToEndTest < ApplicationSystemTestCase
     within all(".ingredient-row").last do
       find("input.material-search-input").set("卵")
       find("input[name*='ingredient_count']").set("2")
-      # Wait for material selection to trigger unit filtering
-      sleep 0.5
+      # Wait for unit options to be updated after material selection
+      assert_selector ".unit-select option[value='#{unit_piece.id}']"
       find(".unit-select").select("piece")
     end
 
@@ -112,8 +112,8 @@ class EndToEndTest < ApplicationSystemTestCase
     within all(".ingredient-row").last do
       find("input.material-search-input").set("牛乳")
       find("input[name*='ingredient_count']").set("200")
-      # Wait for material selection to trigger unit filtering
-      sleep 0.5
+      # Wait for unit options to be updated after material selection
+      assert_selector ".unit-select option[value='#{unit_ml.id}']"
       find(".unit-select").select("ml")
     end
 
