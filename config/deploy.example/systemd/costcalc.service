@@ -17,7 +17,7 @@ EnvironmentFile=-/var/www/costcalc/current/.env.production.local
 
 # Pumaの起動
 ExecStart=/usr/local/bin/bundle exec puma -C config/puma.rb
-ExecStop=/usr/local/bin/bundle exec pumactl -S /var/www/costcalc/shared/tmp/pids/puma.state stop
+ExecStop=/usr/local/bin/bundle exec pumactl -S /var/www/costcalc/current/shared/tmp/pids/puma.state stop
 
 # 自動再起動設定
 Restart=always

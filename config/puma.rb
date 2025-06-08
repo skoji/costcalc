@@ -1,3 +1,5 @@
+require "fileutils"
+
 # This configuration file will be evaluated by Puma. The top-level methods that
 # are invoked here are part of Puma's configuration DSL. For more information
 # about methods provided by the DSL, see https://puma.io/puma/Puma/DSL.html.
@@ -28,7 +30,23 @@ threads_count = ENV.fetch("RAILS_MAX_THREADS", 3)
 threads threads_count, threads_count
 
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
-port ENV.fetch("PORT", 3000)
+# In production, we'll use a Unix socket instead of a TCP port
+if ENV.fetch("RAILS_ENV", "development") == "production"
+  # Bind to a Unix socket
+  app_dir = File.expand_path("../..", __FILE__)
+  shared_dir = "#{app_dir}/shared"
+
+  # Create directories if they don't exist
+  FileUtils.mkdir_p("#{shared_dir}/sockets") unless File.exist?("#{shared_dir}/sockets")
+  FileUtils.mkdir_p("#{shared_dir}/tmp/pids") unless File.exist?("#{shared_dir}/tmp/pids")
+
+  bind "unix://#{shared_dir}/sockets/puma.sock"
+
+  # Set the state file
+  state_path "#{shared_dir}/tmp/pids/puma.state"
+else
+  port ENV.fetch("PORT", 3000)
+end
 
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart
@@ -39,3 +57,19 @@ plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"]
 # Specify the PID file. Defaults to tmp/pids/server.pid in development.
 # In other environments, only set the PID file if requested.
 pidfile ENV["PIDFILE"] if ENV["PIDFILE"]
+
+# Production specific configuration
+if ENV.fetch("RAILS_ENV", "development") == "production"
+  # Use the `preload_app!` method when specifying a `workers` number.
+  # This directive tells Puma to first boot the application and load code
+  # before forking the application. This takes advantage of Copy On Write
+  # process behavior so workers use less memory.
+  preload_app!
+
+  # Specifies the number of `workers` to boot in clustered mode.
+  # Workers are forked web server processes. If using threads and workers together
+  # the concurrency of the application would be max `threads` * `workers`.
+  # Workers do not work on JRuby or Windows (both of which do not support
+  # processes).
+  workers ENV.fetch("WEB_CONCURRENCY", 2)
+end
