@@ -147,7 +147,7 @@ class EndToEndTest < ApplicationSystemTestCase
     assert_text "¥40.00"
 
     # Step 8: Navigate back and verify product in list
-    click_on "← 製品一覧に戻る"
+    click_on "← 製品一覧に戻る", match: :first
 
     # Should be scrolled to the product with highlight
     assert_selector "#product-#{Product.last.id}.ring-2"
