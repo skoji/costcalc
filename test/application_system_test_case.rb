@@ -20,6 +20,12 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     fill_in "Email", with: user.email
     fill_in "Password", with: "password123"
     click_button "Login"
-    assert_text "Signed in successfully."
+
+    # Wait for redirect and check for successful login by looking for authenticated content
+    # This is more reliable than flash messages in CI environments
+    assert_selector "a", text: "Products"
+
+    # Verify we're not on the login page anymore
+    assert_no_selector "input[type='email']"
   end
 end
