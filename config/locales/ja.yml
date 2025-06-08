@@ -65,29 +65,15 @@ ja:
       title: "製品新規登録"
     edit:
       title: "製品編集"
-    preparation_count: "仕込み数"
     preparation_amount: "仕込み量:"
     preparation_amount_label: "仕込み数:"
     cost: "原価"
     cost_per_unit: "１つあたり原価"
-    back_to_list: "← 製品一覧に戻る"
     selling_price_as_cost_ratio: "原価%として:"
     invalid_cost: "原材料の計算が正しく出来ていません"
-    raw_materials: "原材料"
     no_raw_materials: "まだ原材料が登録されていません。"
     edit_to_add_materials: "編集して原材料を追加"
-    add_material: "材料追加"
-    material_name: "材料名"
-    select_material_placeholder: "材料名を選択・入力"
-    amount: "分量"
-    unit: "単位"
-    select_unit: "単位を選択"
     material_price: "材料価格"
-    back_to_list: "← 製品一覧に戻る"
-    new:
-      title: "製品新規登録"
-    edit:
-      title: "製品編集"
     show:
       title: "製品詳細"
 

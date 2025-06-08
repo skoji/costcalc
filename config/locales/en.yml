@@ -65,7 +65,6 @@ en:
       title: "New Product Registration"
     edit:
       title: "Edit Product"
-    preparation_count: "Preparation Count"
     preparation_amount: "Preparation Amount:"
     preparation_amount_label: "Preparation Amount:"
     cost: "Cost"
@@ -73,23 +72,10 @@ en:
     cost_per_unit: "Cost per Unit"
     cost_per_unit_label: "Cost per Unit:"
     cost_ratio_label: "Cost "
-    back_to_list: "← Back to Product List"
     invalid_cost: "Raw material calculation is not correct"
-    raw_materials: "Raw Materials"
     no_raw_materials: "No raw materials have been registered yet."
     edit_to_add_materials: "Edit to add raw materials"
-    add_material: "Add Material"
-    material_name: "Material Name"
-    select_material_placeholder: "Select or enter material name"
-    amount: "Amount"
-    unit: "Unit"
-    select_unit: "Select Unit"
     material_price: "Material Price"
-    back_to_list: "← Back to Product List"
-    new:
-      title: "New Product Registration"
-    edit:
-      title: "Edit Product"
     show:
       title: "Product Details"
 
