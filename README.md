@@ -1,136 +1,134 @@
-# CostCalc (Rails 8)
+# CostCalc
 
-Rails 8版の原価計算アプリケーション。既存のcostcalc-legacyアプリケーションからのアップグレード版です。
+�V���v���Ȍ����v�Z�A�v���P�[�V����
 
-## システム要件
+## �V�X�e���v��
 
 * Ruby 3.4.3+
 * Rails 8.0+
 * SQLite3
 
-## セットアップ
+## �Z�b�g�A�b�v
 
 ```bash
-# 依存関係のインストール
+# �ˑ��֌W�̃C���X�g�[��
 bundle install
 
-# データベースの作成とマイグレーション
+# �f�[�^�x�[�X�̍쐬�ƃ}�C�O���[�V����
 bin/rails db:create db:migrate
 
-# 開発サーバーの起動
+# �J���T�[�o�[�̋N��
 bin/dev
 ```
 
-## 既存データのインポート
+## �����f�[�^�̃C���|�[�g
 
-costcalc-legacyからデータを移行する場合：
+costcalc-legacy����f�[�^���ڍs����ꍇ�F
 
-### 方法1: SQLite3データベースファイルから直接インポート
+### ���@1: SQLite3�f�[�^�x�[�X�t�@�C�����璼�ڃC���|�[�g
 
 ```bash
-# 既存のデータベースファイルを指定してインポート
+# �����̃f�[�^�x�[�X�t�@�C�����w�肵�ăC���|�[�g
 LEGACY_DB_PATH=/path/to/legacy/db/development.sqlite3 bin/rails import:from_legacy
 
-# 確認プロンプトをスキップしたい場合
+# �m�F�v�����v�g���X�L�b�v�������ꍇ
 FORCE=true LEGACY_DB_PATH=/path/to/legacy/db/development.sqlite3 bin/rails import:from_legacy
 ```
 
-### 方法2: SQLダンプファイルからインポート
+### ���@2: SQL�_���v�t�@�C������C���|�[�g
 
 ```bash
-# 既存データベースからSQLダンプを作成（レガシー側で実行）
+# �����f�[�^�x�[�X����SQL�_���v���쐬�i���K�V�[���Ŏ��s�j
 sqlite3 /path/to/legacy/db/development.sqlite3 .dump > legacy_dump.sql
 
-# SQLダンプからインポート
+# SQL�_���v����C���|�[�g
 SQL_DUMP_PATH=/path/to/legacy_dump.sql bin/rails import:from_sql_dump
 ```
 
-### データ検証
+### �f�[�^����
 
-インポート後にデータの整合性を確認：
+�C���|�[�g��Ƀf�[�^�̐��������m�F�F
 
 ```bash
 bin/rails import:validate
 ```
 
-### テスト用サンプルデータの作成
+### �e�X�g�p�T���v���f�[�^�̍쐬
 
 ```bash
-# サンプルのレガシーデータベースを作成
+# �T���v���̃��K�V�[�f�[�^�x�[�X���쐬
 bin/rails import:create_sample_legacy
 
-# 作成されたサンプルデータでインポートテスト
+# �쐬���ꂽ�T���v���f�[�^�ŃC���|�[�g�e�X�g
 LEGACY_DB_PATH=tmp/sample_legacy.sqlite3 bin/rails import:from_legacy
 ```
 
-## 開発
+## �J��
 
-### テストの実行
+### �e�X�g�̎��s
 
 ```bash
-# 全テストの実行
+# �S�e�X�g�̎��s
 bin/rails test
 
-# 特定のテストファイルの実行
+# ����̃e�X�g�t�@�C���̎��s
 bin/rails test test/models/material_test.rb
 
-# インポート機能のテスト
+# �C���|�[�g�@�\�̃e�X�g
 bin/rails test test/lib/import_test.rb
 ```
 
-### データベースのリセット
+### �f�[�^�x�[�X�̃��Z�b�g
 
 ```bash
-# データベースを削除して再作成
+# �f�[�^�x�[�X���폜���čč쐬
 bin/rails db:drop db:create db:migrate
 ```
 
-## 主な機能
+## ��ȋ@�\
 
-- 材料管理（価格、単位付き）
-- 製品管理（原材料の組み合わせ）
-- 原価計算（材料費から製品原価を自動計算）
-- マルチテナント対応（ユーザーごとにデータ分離）
+- �ޗ��Ǘ��i���i�A�P�ʕt���j
+- ���i�Ǘ��i���ޗ��̑g�ݍ��킹�j
+- �����v�Z�i�ޗ���琻�i�����������v�Z�j
+- �}���`�e�i���g�Ή��i���[�U�[���ƂɃf�[�^�����j
 
-## アーキテクチャ
+## �A�[�L�e�N�`��
 
-### データモデル
+### �f�[�^���f��
 
 ```
-User (ユーザー)
-├── Materials (材料)
-│   ├── MaterialQuantities (材料数量)
-│   └── ProductIngredients (製品原材料)
-├── Products (製品)
-│   └── ProductIngredients (製品原材料)
-└── Units (単位)
+User (���[�U�[)
+������ Materials (�ޗ�)
+��   ������ MaterialQuantities (�ޗ�����)
+��   ������ ProductIngredients (���i���ޗ�)
+������ Products (���i)
+��   ������ ProductIngredients (���i���ޗ�)
+������ Units (�P��)
 ```
 
-### 技術スタック
+### �Z�p�X�^�b�N
 
-- **バックエンド**: Rails 8.0, SQLite3
-- **フロントエンド**: Turbo, Stimulus, Tailwind CSS
-- **テスト**: Minitest
-- **デプロイ**: Kamal (Docker)
+- **�o�b�N�G���h**: Rails 8.0, SQLite3
+- **�t�����g�G���h**: Turbo, Stimulus, Tailwind CSS
+- **�e�X�g**: Minitest
+- **�f�v���C**: Kamal (Docker)
 
-## デプロイメント
+## �f�v���C�����g
 
-このアプリケーションは複数の方法でデプロイ可能です。
+���̃A�v���P�[�V�����͕����̕��@�Ńf�v���C�\�ł��B
 
-### 方法1: 既存VPSへの相乗りデプロイ（nginx + Puma）
+### ���@1: nginx + Puma
 
-既存のVPSに他のサービスと共存させる形でデプロイする方法です。
-
-#### 前提条件
-- Ubuntu 20.04以上
+#### �O�����
+- Ubuntu 20.04�ȏ�
 - Ruby 3.4.3
 - nginx
 - systemd
 - SQLite3
 
-#### セットアップ手順
+#### �Z�b�g�A�b�v�菇
 
-1. **アプリケーションディレクトリの準備**
+1. **�A�v���P�[�V�����f�B���N�g���̏���**
 ```bash
 sudo mkdir -p /var/www/costcalc
 sudo chown deploy:deploy /var/www/costcalc
@@ -139,33 +137,33 @@ git clone https://github.com/yourusername/costcalc.git current
 mkdir -p shared/sockets shared/log shared/tmp/pids shared/storage
 ```
 
-2. **設定ファイルのコピーと編集**
+2. **�ݒ�t�@�C���̃R�s�[�ƕҏW**
 ```bash
-# nginx設定
+# nginx�ݒ�
 sudo cp current/config/deploy.example/nginx/costcalc.conf /etc/nginx/sites-available/
 sudo ln -s /etc/nginx/sites-available/costcalc.conf /etc/nginx/sites-enabled/
-# server_nameを実際のドメインに変更
+# server_name�����ۂ̃h���C���ɕύX
 
-# systemd設定
+# systemd�ݒ�
 sudo cp current/config/deploy.example/systemd/costcalc.service /etc/systemd/system/
-# 必要に応じてパスやユーザー名を調整
+# �K�v�ɉ����ăp�X�⃆�[�U�[���𒲐�
 ```
 
-3. **環境変数の設定**
+3. **���ϐ��̐ݒ�**
 ```bash
 cd /var/www/costcalc/current
 cp .env.example .env.production.local
-# 編集して必要な値を設定（特にRAILS_MASTER_KEY）
+# �ҏW���ĕK�v�Ȓl��ݒ�i����RAILS_MASTER_KEY�j
 ```
 
-4. **初回セットアップ**
+4. **����Z�b�g�A�b�v**
 ```bash
 bundle install --deployment --without development test
 RAILS_ENV=production bundle exec rails db:create db:migrate
 RAILS_ENV=production bundle exec rails assets:precompile
 ```
 
-5. **サービスの開始**
+5. **�T�[�r�X�̊J�n**
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl enable costcalc
@@ -173,146 +171,132 @@ sudo systemctl start costcalc
 sudo nginx -s reload
 ```
 
-6. **デプロイ用スクリプトの設定（オプション）**
+6. **�f�v���C�p�X�N���v�g�̐ݒ�i�I�v�V�����j**
 ```bash
-# デプロイスクリプトをコピー
+# �f�v���C�X�N���v�g���R�s�[
 cp config/deploy.example/scripts/deploy.sh /var/www/costcalc/
 chmod +x /var/www/costcalc/deploy.sh
-# 必要に応じてスクリプトの設定値を編集
+# �K�v�ɉ����ăX�N���v�g�̐ݒ�l��ҏW
 
-# 今後のデプロイは以下で実行
+# ����̃f�v���C�͈ȉ��Ŏ��s
 /var/www/costcalc/deploy.sh
 ```
 
-### 方法2: Fly.io へのデプロイ
+### ���@2: Fly.io �ւ̃f�v���C
 
-Fly.ioは分散型のアプリケーションプラットフォームで、SQLiteアプリケーションに最適です。
+Fly.io�͕��U�^�̃A�v���P�[�V�����v���b�g�t�H�[���ŁASQLite�A�v���P�[�V�����ɍœK�ł��B
 
-#### 前提条件
-- Fly CLIのインストール: https://fly.io/docs/hands-on/install-flyctl/
-- Fly.ioアカウント
+#### �O�����
+- Fly CLI�̃C���X�g�[��: https://fly.io/docs/hands-on/install-flyctl/
+- Fly.io�A�J�E���g
 
-#### セットアップ手順
+#### �Z�b�g�A�b�v�菇
 
-1. **Fly.ioへのログイン**
+1. **Fly.io�ւ̃��O�C��**
 ```bash
 fly auth login
 ```
 
-2. **アプリケーションの作成**
+2. **�A�v���P�[�V�����̍쐬**
 ```bash
 cp fly.toml.example fly.toml
-# appの値をユニークな名前に変更（例: costcalc-yourname）
+# app�̒l�����j�[�N�Ȗ��O�ɕύX�i��: costcalc-yourname�j
 fly apps create costcalc-yourname
 ```
 
-3. **シークレットの設定**
+3. **�V�[�N���b�g�̐ݒ�**
 ```bash
 fly secrets set RAILS_MASTER_KEY=$(cat config/master.key)
 ```
 
-4. **ボリュームの作成**（データ永続化用）
+4. **�{�����[���̍쐬**�i�f�[�^�i�����p�j
 ```bash
 fly volumes create costcalc_storage --region nrt --size 1
 ```
 
-5. **デプロイ**
+5. **�f�v���C**
 ```bash
 fly deploy
 ```
 
-6. **データベースのセットアップ**
+6. **�f�[�^�x�[�X�̃Z�b�g�A�b�v**
 ```bash
 fly ssh console -C "bin/rails db:migrate"
 ```
 
-7. **データベースの初期化（必要な場合）**
+7. **�f�[�^�x�[�X�̏������i�K�v�ȏꍇ�j**
 ```bash
 fly ssh console -C "bin/rails db:seed"
 ```
 
-### 方法3: Kamal を使用したDockerデプロイ
+### ���@3: Kamal ���g�p����Docker�f�v���C
 
-詳細は[Kamal公式ドキュメント](https://kamal-deploy.org/)を参照してください。
-基本的な設定は`config/deploy.yml`に含まれています。
+�ڍׂ�[Kamal�����h�L�������g](https://kamal-deploy.org/)���Q�Ƃ��Ă��������B
+��{�I�Ȑݒ��`config/deploy.yml`�Ɋ܂܂�Ă��܂��B
 
-### データベースバックアップ
+### �f�[�^�x�[�X�o�b�N�A�b�v
 
-#### SQLiteの場合
+#### SQLite�̏ꍇ
 
-1. **手動バックアップ**
+1. **�蓮�o�b�N�A�b�v**
 ```bash
-# 本番データベースのバックアップ
+# �{�ԃf�[�^�x�[�X�̃o�b�N�A�b�v
 sqlite3 storage/production.sqlite3 ".backup storage/backup_$(date +%Y%m%d).sqlite3"
 
-# リストア方法
+# ���X�g�A���@
 cp storage/backup_20241206.sqlite3 storage/production.sqlite3
 ```
 
-2. **自動バックアップの設定（VPS環境）**
+2. **�����o�b�N�A�b�v�̐ݒ�iVPS���j**
 ```bash
-# バックアップスクリプトを設置
+# �o�b�N�A�b�v�X�N���v�g��ݒu
 sudo cp config/deploy.example/scripts/backup.sh /usr/local/bin/costcalc-backup
 sudo chmod +x /usr/local/bin/costcalc-backup
 
-# cronジョブの設定
+# cron�W���u�̐ݒ�
 sudo cp config/deploy.example/cron/costcalc-backup /etc/cron.d/
 sudo chmod 644 /etc/cron.d/costcalc-backup
 ```
 
-3. **Fly.ioでのバックアップ**
+3. **Fly.io�ł̃o�b�N�A�b�v**
 ```bash
-# スナップショットの作成
+# �X�i�b�v�V���b�g�̍쐬
 fly volumes snapshots create vol_xxxxx
 
-# スナップショット一覧
+# �X�i�b�v�V���b�g�ꗗ
 fly volumes snapshots list vol_xxxxx
 
-# ローカルへのダウンロード
+# ���[�J���ւ̃_�E�����[�h
 fly ssh console -C "cat /rails/storage/production.sqlite3" > backup.sqlite3
 ```
 
-### バックアップのベストプラクティス
+### �o�b�N�A�b�v�̃x�X�g�v���N�e�B�X
 
-1. **3-2-1ルール**
-   - 3つのコピー（本番 + バックアップ2つ）
-   - 2つの異なるメディア（ローカル + クラウド）
-   - 1つはオフサイト（別の場所）
+1. **3-2-1���[��**
+   - 3�̃R�s�[�i�{�� + �o�b�N�A�b�v2�j
+   - 2�̈قȂ郁�f�B�A�i���[�J�� + �N���E�h�j
+   - 1�̓I�t�T�C�g�i�ʂ̏ꏊ�j
 
-2. **定期的なリストアテスト**
-   - 月1回はバックアップからのリストアをテスト
-   - 手順書を最新に保つ
+2. **����I�ȃ��X�g�A�e�X�g**
+   - ��1��̓o�b�N�A�b�v����̃��X�g�A���e�X�g
+   - �菇�����ŐV�ɕۂ�
 
-3. **監視**
-   - バックアップジョブの成功/失敗を監視
-   - ディスク容量の監視
+3. **�Ď�**
+   - �o�b�N�A�b�v�W���u�̐���/���s���Ď�
+   - �f�B�X�N�e�ʂ̊Ď�
 
-### 本番環境での注意事項
+### �{�Ԋ��ł̒��ӎ���
 
-1. **セキュリティ**
-   - 必ず`RAILS_MASTER_KEY`を設定してください
-   - 本番環境では強力なパスワードポリシーを設定してください
-   - 定期的にセキュリティアップデートを適用してください
+1. **�Z�L�����e�B**
+   - �K��`RAILS_MASTER_KEY`��ݒ肵�Ă�������
+   - �{�Ԋ��ł͋��͂ȃp�X���[�h�|���V�[��ݒ肵�Ă�������
+   - ����I�ɃZ�L�����e�B�A�b�v�f�[�g��K�p���Ă�������
 
-2. **パフォーマンス**
-   - 必要に応じて`config/puma.rb`のワーカー数を調整してください
-   - nginxのキャッシュ設定を適切に行ってください
+2. **�p�t�H�[�}���X**
+   - �K�v�ɉ�����`config/puma.rb`�̃��[�J�[���𒲐����Ă�������
+   - nginx�̃L���b�V���ݒ��K�؂ɍs���Ă�������
 
-3. **監視**
-   - アプリケーションログを定期的に確認してください
-   - システムリソース（CPU、メモリ、ディスク）を監視してください
+3. **�Ď�**
+   - �A�v���P�[�V�������O�����I�Ɋm�F���Ă�������
+   - �V�X�e�����\�[�X�iCPU�A�������A�f�B�X�N�j���Ď����Ă�������
 
-## 本番環境への移行
-
-1. 既存のcostcalc-legacyアプリケーションを停止
-2. データベースファイルをバックアップ
-3. 新しいRails 8アプリケーションをデプロイ
-4. インポートタスクでデータ移行
-5. 動作確認後にDNS切り替え
-
-## 既存アプリケーションとの違い
-
-- Rails 6.0 → Rails 8.0
-- jQuery + Bootstrap → Turbo + Stimulus + Tailwind CSS
-- 原価率30%のハードコードを削除し設定可能へ
-- より高速なWebpackerからimportmapへの移行
