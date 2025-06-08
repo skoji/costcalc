@@ -4,11 +4,11 @@ class AuthenticationTest < ApplicationSystemTestCase
   test "user can sign up" do
     visit new_user_registration_path
 
-    fill_in "メールアドレス", with: "newuser@example.com"
-    fill_in "パスワード", with: "password123"
-    fill_in "パスワード（確認）", with: "password123"
+    fill_in "Email", with: "newuser@example.com"
+    fill_in "Password", with: "password123"
+    fill_in "Password Confirmation", with: "password123"
 
-    click_button "登録"
+    click_button "Sign Up"
 
     assert_text "Welcome! You have signed up successfully."
     assert_current_path products_path
@@ -23,17 +23,17 @@ class AuthenticationTest < ApplicationSystemTestCase
 
     visit root_path
 
-    fill_in "メールアドレス", with: "existing@example.com"
-    fill_in "パスワード", with: "password123"
+    fill_in "Email", with: "existing@example.com"
+    fill_in "Password", with: "password123"
 
-    click_button "ログイン"
+    click_button "Login"
 
     assert_text "Signed in successfully."
     # Deviseはroot_pathにリダイレクトし、その後productsへリダイレクトされる
     assert_current_path root_path
 
     # Sign out
-    click_on "ログアウト"
+    click_on "Logout"
 
     # Check redirect first, then message
     assert_current_path root_path
@@ -51,20 +51,20 @@ class AuthenticationTest < ApplicationSystemTestCase
 
     sign_in_as(user)
 
-    click_on "設定"
+    click_on "Settings"
 
-    assert_text "設定の編集"
-    assert_field "原価率（小数）", with: "0.3"
+    assert_text "Edit Settings"
+    assert_field "Cost Ratio (decimal)", with: "0.3"
 
-    fill_in "原価率（小数）", with: "0.25"
-    fill_in "現在のパスワード", with: "password123"
+    fill_in "Cost Ratio (decimal)", with: "0.25"
+    fill_in "Current Password", with: "password123"
 
-    click_button "更新"
+    click_button "Update"
 
     assert_text "Your account has been updated successfully."
 
     # Verify the change persisted
-    click_on "設定"
-    assert_field "原価率（小数）", with: "0.25"
+    click_on "Settings"
+    assert_field "Cost Ratio (decimal)", with: "0.25"
   end
 end
