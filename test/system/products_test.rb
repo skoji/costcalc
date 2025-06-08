@@ -208,5 +208,4 @@ class ProductsTest < ApplicationSystemTestCase
     # Should have 4 ingredient rows total
     assert_selector ".ingredient-row", count: 4
   end
-
 end

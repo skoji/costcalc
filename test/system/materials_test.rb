@@ -103,5 +103,4 @@ class MaterialsTest < ApplicationSystemTestCase
     assert_text "マーガリン"
     assert_text "オリーブオイル"
   end
-
 end

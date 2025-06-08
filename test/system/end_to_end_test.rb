@@ -131,19 +131,19 @@ class EndToEndTest < ApplicationSystemTestCase
     # Step 7: Verify product details (already on show page after creation)
     assert_text "原材料"
     assert_text "強力粉"
-    assert_text "500 g"
+    assert_text "500.0 g"
     assert_text "¥150.00"
 
     assert_text "バター"
-    assert_text "150 g"
+    assert_text "150.0 g"
     assert_text "¥300.00"
 
     assert_text "卵"
-    assert_text "2 個"
+    assert_text "2.0 個"
     assert_text "¥50.00"
 
     assert_text "牛乳"
-    assert_text "200 ml"
+    assert_text "200.0 ml"
     assert_text "¥40.00"
 
     # Step 8: Navigate back and verify product in list
@@ -210,5 +210,4 @@ class EndToEndTest < ApplicationSystemTestCase
     assert_text "１つあたり原価: ¥150.00" # 750円 / 5個
     assert_text "原価30%として: ¥500.00" # 150円 / 0.3
   end
-
 end

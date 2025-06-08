@@ -19,6 +19,6 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     fill_in "メールアドレス", with: user.email
     fill_in "パスワード", with: "password123"
     click_button "ログイン"
-    assert_text "Signed in successfully." 
+    assert_text "Signed in successfully."
   end
 end
