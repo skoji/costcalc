@@ -33,7 +33,7 @@ class EndToEndTest < ApplicationSystemTestCase
     user = User.last
     unit_g = Unit.create!(name: "g", user: user)
     unit_ml = Unit.create!(name: "ml", user: user)
-    unit_個 = Unit.create!(name: "個", user: user)
+    unit_piece = Unit.create!(name: "piece", user: user)
 
     # Step 4: Create materials
     click_on "Materials"
@@ -61,7 +61,7 @@ class EndToEndTest < ApplicationSystemTestCase
     fill_in "Material Name", with: "卵"
     fill_in "Price (yen)", with: "250"
     fill_in "Quantity", with: "10"
-    find("select[name*='unit_id']").select("個")
+    find("select[name*='unit_id']").select("piece")
     click_button "Create"
     assert_text "Material was successfully created."
 
@@ -99,7 +99,7 @@ class EndToEndTest < ApplicationSystemTestCase
     within all(".ingredient-row").last do
       find("input.material-search-input").set("卵")
       find("input[name*='ingredient_count']").set("2")
-      find(".unit-select").select("個")
+      find(".unit-select").select("piece")
     end
 
     click_on "Add Material", match: :first
@@ -139,7 +139,7 @@ class EndToEndTest < ApplicationSystemTestCase
     assert_text "¥300.00"
 
     assert_text "卵"
-    assert_text "2.0 個"
+    assert_text "2.0 piece"
     assert_text "¥50.00"
 
     assert_text "牛乳"
@@ -172,7 +172,7 @@ class EndToEndTest < ApplicationSystemTestCase
       profit_ratio: 0.3
     )
 
-    unit = Unit.create!(name: "個", user: user)
+    unit = Unit.create!(name: "piece", user: user)
 
     material = Material.create!(name: "りんご", user: user, price: 1000.0)
     material_qty = MaterialQuantity.create!(

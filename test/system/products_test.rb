@@ -11,7 +11,7 @@ class ProductsTest < ApplicationSystemTestCase
 
     @unit_g = Unit.create!(name: "g", user: @user)
     @unit_ml = Unit.create!(name: "ml", user: @user)
-    @unit_個 = Unit.create!(name: "個", user: @user)
+    @unit_piece = Unit.create!(name: "piece", user: @user)
 
     # Create materials for testing
     @flour = Material.create!(name: "小麦粉", user: @user, price: 200.0)
@@ -21,7 +21,7 @@ class ProductsTest < ApplicationSystemTestCase
     MaterialQuantity.create!(material: @sugar, unit: @unit_g, count: 1000)
 
     @egg = Material.create!(name: "卵", user: @user, price: 200.0)
-    MaterialQuantity.create!(material: @egg, unit: @unit_個, count: 10)
+    MaterialQuantity.create!(material: @egg, unit: @unit_piece, count: 10)
 
     @milk = Material.create!(name: "牛乳", user: @user, price: 200.0)
     MaterialQuantity.create!(material: @milk, unit: @unit_ml, count: 1000)
@@ -59,7 +59,7 @@ class ProductsTest < ApplicationSystemTestCase
     within all(".ingredient-row").last do
       find("input.material-search-input").set("卵")
       find("input[name*='ingredient_count']").set("2")
-      find(".unit-select").select("個")
+      find(".unit-select").select("piece")
     end
 
     click_button "Create"
@@ -104,7 +104,7 @@ class ProductsTest < ApplicationSystemTestCase
     within all(".ingredient-row").last do
       find("input.material-search-input").set("卵")
       find("input[name*='ingredient_count']").set("1")
-      find(".unit-select").select("個")
+      find(".unit-select").select("piece")
     end
 
     click_button "Update"

@@ -75,6 +75,7 @@ en:
     no_raw_materials: "No raw materials have been registered yet."
     edit_to_add_materials: "Edit to add raw materials"
     material_price: "Material Price"
+    back_to_list: "← Back to Product List"
     show:
       title: "Product Details"
 

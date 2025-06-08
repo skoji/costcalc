@@ -73,6 +73,7 @@ ja:
     no_raw_materials: "まだ原材料が登録されていません。"
     edit_to_add_materials: "編集して原材料を追加"
     material_price: "材料価格"
+    back_to_list: "← 製品一覧に戻る"
     show:
       title: "製品詳細"
 
