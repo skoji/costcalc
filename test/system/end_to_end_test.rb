@@ -43,7 +43,7 @@ class EndToEndTest < ApplicationSystemTestCase
     fill_in "材料名", with: "強力粉"
     fill_in "価格 (円)", with: "300"
     fill_in "数量", with: "1000"
-    select "g", from: "単位を選択"
+    select "g", from: "単位"
     click_button "新規登録"
     assert_text "Material was successfully created."
 
@@ -52,7 +52,7 @@ class EndToEndTest < ApplicationSystemTestCase
     fill_in "材料名", with: "バター"
     fill_in "価格 (円)", with: "400"
     fill_in "数量", with: "200"
-    select "g", from: "単位を選択"
+    select "g", from: "単位"
     click_button "新規登録"
     assert_text "Material was successfully created."
 
@@ -61,7 +61,7 @@ class EndToEndTest < ApplicationSystemTestCase
     fill_in "材料名", with: "卵"
     fill_in "価格 (円)", with: "250"
     fill_in "数量", with: "10"
-    select "個", from: "単位を選択"
+    select "個", from: "単位"
     click_button "新規登録"
     assert_text "Material was successfully created."
 
@@ -70,7 +70,7 @@ class EndToEndTest < ApplicationSystemTestCase
     fill_in "材料名", with: "牛乳"
     fill_in "価格 (円)", with: "200"
     fill_in "数量", with: "1000"
-    select "ml", from: "単位を選択"
+    select "ml", from: "単位"
     click_button "新規登録"
     assert_text "Material was successfully created."
 
@@ -85,28 +85,28 @@ class EndToEndTest < ApplicationSystemTestCase
     within ".ingredient-row", match: :first do
       fill_in "材料名を選択・入力", with: "強力粉"
       fill_in "分量", with: "500"
-      select "g", from: "単位を選択"
+      select "g", from: "単位"
     end
 
     click_on "材料追加", match: :first
     within all(".ingredient-row").last do
       fill_in "材料名を選択・入力", with: "バター"
       fill_in "分量", with: "150"
-      select "g", from: "単位を選択"
+      select "g", from: "単位"
     end
 
     click_on "材料追加", match: :first
     within all(".ingredient-row").last do
       fill_in "材料名を選択・入力", with: "卵"
       fill_in "分量", with: "2"
-      select "個", from: "単位を選択"
+      select "個", from: "単位"
     end
 
     click_on "材料追加", match: :first
     within all(".ingredient-row").last do
       fill_in "材料名を選択・入力", with: "牛乳"
       fill_in "分量", with: "200"
-      select "ml", from: "単位を選択"
+      select "ml", from: "単位"
     end
 
     click_button "新規登録"

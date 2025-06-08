@@ -24,7 +24,7 @@ class MaterialsTest < ApplicationSystemTestCase
 
     # Set the unit information
     fill_in "数量", with: "1000"
-    select "g", from: "単位を選択"
+    select "g", from: "単位"
 
     click_button "新規登録"
 
