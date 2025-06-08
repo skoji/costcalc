@@ -314,5 +314,5 @@ fly ssh console -C "cat /rails/storage/production.sqlite3" > backup.sqlite3
 
 - Rails 6.0 → Rails 8.0
 - jQuery + Bootstrap → Turbo + Stimulus + Tailwind CSS
-- 原価率30%のハードコードを削除（設定可能にする予定）
+- 原価率30%のハードコードを削除し設定可能へ
 - より高速なWebpackerからimportmapへの移行
