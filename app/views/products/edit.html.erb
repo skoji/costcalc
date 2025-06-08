@@ -82,10 +82,10 @@
               
               <!-- 単位（材料に応じて絞り込み）-->
               <div class="col-span-3">
-                <label class="block text-xs text-gray-600 mb-1"><%= t('products.unit') %></label>
+                <label class="block text-xs text-gray-600 mb-1"><%= t('materials.unit') %></label>
                 <select name="product_form[product_ingredients_attributes][<%= index %>][unit_id]"
                         class="unit-select w-full px-2 py-1 border border-gray-300 rounded text-sm">
-                  <option value=""><%= t('products.select_unit') %></option>
+                  <option value=""><%= t('materials.select_unit') %></option>
                   <% if ingredient_form.material_id.present? %>
                     <% material = current_user.materials.find_by(id: ingredient_form.material_id) %>
                     <% if material %>
@@ -168,10 +168,10 @@
           
           <!-- 単位 -->
           <div class="col-span-3">
-            <label class="block text-xs text-gray-600 mb-1"><%= t('products.unit') %></label>
+            <label class="block text-xs text-gray-600 mb-1"><%= t('materials.unit') %></label>
             <select name="product_form[product_ingredients_attributes][__INDEX__][unit_id]"
                     class="unit-select w-full px-2 py-1 border border-gray-300 rounded text-sm">
-              <option value=""><%= t('products.select_unit') %></option>
+              <option value=""><%= t('materials.select_unit') %></option>
             </select>
           </div>
           

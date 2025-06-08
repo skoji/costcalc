@@ -60,7 +60,7 @@
               <%= quantity.label :unit_id, t('materials.unit'), class: "block text-xs text-gray-600 mb-1" %>
               <%= quantity.select :unit_id, 
                   options_for_select(current_user.units.map{ |u| [u.name, u.id] }, quantity.object.unit_id), 
-                  { prompt: t('products.select_unit') },
+                  { prompt: t('materials.select_unit') },
                   { class: "w-full px-2 py-1 border border-gray-300 rounded text-sm" } %>
             </div>
             

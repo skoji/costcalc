@@ -37,6 +37,7 @@ en:
     purchase_unit: "Purchase Unit"
     purchase_unit_description: "Please specify which unit the above price is per"
     unit: "Unit"
+    select_unit: "Select unit"
     per: "per"
     new:
       title: "New Raw Material Registration"
@@ -56,8 +57,6 @@ en:
     select_material_placeholder: "Select or enter material name"
     quantity: "Quantity"
     amount: "Amount"
-    unit: "Unit"
-    select_unit: "Select unit"
     add_first_product: "Add First Product"
     no_products: "No products have been registered yet."
     search_placeholder: "Search by product name..."
