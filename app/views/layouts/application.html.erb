@@ -58,7 +58,7 @@
           </div>
           
           <!-- Mobile menu button -->
-          <button type="button" class="md:hidden mobile-menu-button" aria-label="Menu">
+          <button type="button" class="md:hidden" aria-label="Menu" data-action="click->mobile-menu#toggle">
             <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-16 6h16"></path>
             </svg>
@@ -66,7 +66,7 @@
         </div>
         
         <!-- Mobile Navigation -->
-        <div class="md:hidden mobile-menu hidden mt-3 pt-3 border-t">
+        <div class="md:hidden hidden mt-3 pt-3 border-t" data-mobile-menu-target="menu">
           <% if user_signed_in? %>
             <div class="space-y-2">
               <%= link_to t('navigation.products'), products_path, 
