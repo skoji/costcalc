@@ -68,6 +68,8 @@ ja:
     preparation_amount_label: "仕込み数:"
     cost: "原価"
     cost_per_unit: "１つあたり原価"
+    cost_ratio_label: "原価"
+    cost_ratio_suffix: "%として:"
     selling_price_as_cost_ratio: "原価%として:"
     invalid_cost: "原材料の計算が正しく出来ていません"
     no_raw_materials: "まだ原材料が登録されていません。"

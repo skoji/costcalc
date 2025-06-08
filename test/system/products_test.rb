@@ -69,7 +69,7 @@ class ProductsTest < ApplicationSystemTestCase
     assert_text "Preparation Count: 10"
     assert_text "Cost:"
     assert_text "Cost per Unit:"
-    assert_text "原価30%として:"
+    assert_text "Cost 30% as cost:"
   end
 
   test "user can edit a product and add/remove ingredients" do

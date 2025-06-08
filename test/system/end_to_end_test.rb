@@ -134,7 +134,7 @@ class EndToEndTest < ApplicationSystemTestCase
     assert_text "Cost per Unit: ¥45.00"
 
     # Selling price at 25% cost rate = 45円 / 0.25 = 180円
-    assert_text "原価25%として: ¥180.00"
+    assert_text "Cost 25% as cost: ¥180.00"
 
     # Step 7: Verify product details (already on show page after creation)
     assert_text "Raw Materials"
@@ -203,7 +203,7 @@ class EndToEndTest < ApplicationSystemTestCase
     visit product_path(product)
     assert_text "¥500.00" # 5個 * (1000円/10個) = 500円
     assert_text "Cost per Unit: ¥100.00" # 500円 / 5個
-    assert_text "原価30%として: ¥333.33" # 100円 / 0.3
+    assert_text "Cost 30% as cost: ¥333.33" # 100円 / 0.3
 
     # Update material price
     visit materials_path
@@ -218,6 +218,6 @@ class EndToEndTest < ApplicationSystemTestCase
     visit product_path(product)
     assert_text "¥750.00" # 5個 * (1500円/10個) = 750円
     assert_text "Cost per Unit: ¥150.00" # 750円 / 5個
-    assert_text "原価30%として: ¥500.00" # 150円 / 0.3
+    assert_text "Cost 30% as cost: ¥500.00" # 150円 / 0.3
   end
 end

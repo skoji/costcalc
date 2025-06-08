@@ -71,6 +71,7 @@ en:
     cost_per_unit: "Cost per Unit"
     cost_per_unit_label: "Cost per Unit:"
     cost_ratio_label: "Cost "
+    cost_ratio_suffix: "% as cost:"
     invalid_cost: "Raw material calculation is not correct"
     no_raw_materials: "No raw materials have been registered yet."
     edit_to_add_materials: "Edit to add raw materials"

@@ -19,7 +19,7 @@
       </div>
       <div>
         <p class="text-gray-700"><strong><%= t('products.cost_per_unit') %>:</strong> ¥<%= number_with_precision @product.cost_per_unit, precision: 2 %></p>
-        <p class="text-gray-700"><strong>原価<%= (current_user.profit_ratio * 100).to_i %>%として:</strong> ¥<%= number_with_precision current_user.selling_price_for(@product.cost_per_unit), precision: 2 %></p>
+        <p class="text-gray-700"><strong><%= t('products.cost_ratio_label') %><%= (current_user.profit_ratio * 100).to_i %><%= t('products.cost_ratio_suffix') %></strong> ¥<%= number_with_precision current_user.selling_price_for(@product.cost_per_unit), precision: 2 %></p>
       </div>
     </div>
   </div>
