@@ -26,13 +26,13 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   test "should get index" do
     get products_url
     assert_response :success
-    assert_includes response.body, "製品"
+    assert_includes response.body, "Products"
   end
 
   test "should get new" do
     get new_product_url
     assert_response :success
-    assert_includes response.body, "製品新規登録"
+    assert_includes response.body, "New Product Registration"
   end
 
   test "should create product" do
@@ -68,7 +68,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   test "should get edit" do
     get edit_product_url(@product)
     assert_response :success
-    assert_includes response.body, "製品編集"
+    assert_includes response.body, "Edit Product"
   end
 
   test "should update product" do

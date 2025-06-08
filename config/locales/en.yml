@@ -1,31 +1,140 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
 en:
-  hello: "Hello world"
+  navigation:
+    products: "Products"
+    materials: "Materials"
+    settings: "Settings"
+    logout: "Logout"
+    login: "Login"
+    sign_up: "Sign Up"
+
+  common:
+    edit: "Edit"
+    delete: "Delete"
+    create: "Create"
+    update: "Update"
+    cancel: "Cancel"
+    clear: "Clear"
+    details: "Details"
+    back: "Back"
+    back_to_list: "Back to List"
+    confirm_delete: "Are you sure you want to delete?"
+    confirm_delete_really: "Are you sure you want to delete?"
+    error_occurred: "An error occurred:"
+    yen: "yen"
+
+  materials:
+    title: "Raw Materials"
+    add_material: "Add Material"
+    add_first_material: "Add First Material"
+    no_materials: "No raw materials have been registered yet."
+    search_placeholder: "Search by material name..."
+    name: "Material Name"
+    name_label: "Name:"
+    price: "Price:"
+    price_label: "Price:"
+    price_yen: "Price (yen)"
+    quantity: "Quantity:"
+    purchase_unit: "Purchase Unit"
+    purchase_unit_description: "Please specify which unit the above price is per"
+    unit: "Unit"
+    per: "per"
+    new:
+      title: "New Raw Material Registration"
+    edit:
+      title: "Edit Raw Material"
+    show:
+      title: "Material Details"
+
+  products:
+    title: "Products"
+    add_product: "Add Product"
+    name: "Product Name"
+    preparation_count: "Preparation Count"
+    raw_materials: "Raw Materials"
+    add_material: "Add Material"
+    material_name: "Material Name"
+    select_material_placeholder: "Select or enter material name"
+    quantity: "Quantity"
+    amount: "Amount"
+    unit: "Unit"
+    select_unit: "Select unit"
+    add_first_product: "Add First Product"
+    no_products: "No products have been registered yet."
+    search_placeholder: "Search by product name..."
+    new:
+      title: "New Product Registration"
+    edit:
+      title: "Edit Product"
+    preparation_count: "Preparation Count"
+    preparation_amount: "Preparation Amount:"
+    preparation_amount_label: "Preparation Amount:"
+    cost: "Cost"
+    cost_label: "Cost:"
+    cost_per_unit: "Cost per Unit"
+    cost_per_unit_label: "Cost per Unit:"
+    cost_ratio_label: "Cost "
+    back_to_list: "← Back to Product List"
+    invalid_cost: "Raw material calculation is not correct"
+    raw_materials: "Raw Materials"
+    no_raw_materials: "No raw materials have been registered yet."
+    edit_to_add_materials: "Edit to add raw materials"
+    add_material: "Add Material"
+    material_name: "Material Name"
+    select_material_placeholder: "Select or enter material name"
+    amount: "Amount"
+    unit: "Unit"
+    select_unit: "Select Unit"
+    material_price: "Material Price"
+    back_to_list: "← Back to Product List"
+    new:
+      title: "New Product Registration"
+    edit:
+      title: "Edit Product"
+    show:
+      title: "Product Details"
+
+  devise:
+    email: "Email"
+    password: "Password"
+    password_confirmation: "Password Confirmation"
+    current_password: "Current Password"
+    remember_me: "Remember me"
+    minimum_password_length: "characters minimum"
+    profit_ratio: "Cost Ratio (decimal)"
+    profit_ratio_example: "e.g., 0.3 = 30%, 0.2 = 20%"
+    password_blank_note: "Leave blank if you don't want to change it"
+    current_password_note: "We need your current password to confirm your changes"
+    pending_reconfirmation: "Currently waiting confirmation for:"
+    sessions:
+      new:
+        title: "Login"
+        submit: "Login"
+    registrations:
+      new:
+        title: "Sign Up"
+        submit: "Sign Up"
+      edit:
+        title: "Edit Settings"
+        submit: "Update"
+        delete_account: "Delete Account"
+        delete_account_button: "Delete Account"
+        confirm_delete: "Are you sure you want to delete your account?"
+    shared:
+      links:
+        login: "Login"
+        sign_up: "Sign Up"
+        forgot_password: "Forgot your password?"
+        resend_confirmation: "Didn't receive confirmation instructions?"
+        unlock_account: "Didn't receive unlock instructions?"
+
+  flash:
+    material:
+      created: "Material was successfully created."
+      updated: "Material was successfully updated."
+      destroyed: "Material was successfully deleted."
+    product:
+      created: "Product was successfully created."
+      updated: "Product was successfully updated."
+      destroyed: "Product was successfully deleted."
+      create_failed: "Failed to create product"
+      update_failed: "Failed to update product"

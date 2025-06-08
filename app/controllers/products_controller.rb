@@ -14,9 +14,9 @@ class ProductsController < ApplicationController
     begin
       @product_form.persist!(current_user)
       product = @product_form.product
-      redirect_to product_path(product), notice: "Product was successfully created."
+      redirect_to product_path(product), notice: t("flash.product.created")
     rescue => e
-      flash.now[:error] = "作成に失敗しました: #{e.message}"
+      flash.now[:error] = "#{t('flash.product.create_failed')}: #{e.message}"
       render :new, status: :unprocessable_entity
     end
   end
@@ -29,16 +29,16 @@ class ProductsController < ApplicationController
     @product_form = ProductForm.new(product_form_params)
     begin
       @product_form.persist!(current_user)
-      redirect_to product_path(@product_form.product), notice: "Product was successfully updated."
+      redirect_to product_path(@product_form.product), notice: t("flash.product.updated")
     rescue => e
-      flash.now[:error] = "更新に失敗しました: #{e.message}"
+      flash.now[:error] = "#{t('flash.product.update_failed')}: #{e.message}"
       render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
     @product.destroy
-    redirect_to products_path, notice: "Product was successfully destroyed."
+    redirect_to products_path, notice: t("flash.product.destroyed")
   end
 
   def show

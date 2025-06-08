@@ -1,7 +1,7 @@
 <div class="container mx-auto px-4">
   <div class="flex justify-between items-center mb-6">
-    <h1 class="text-3xl font-bold">製品</h1>
-    <%= link_to "製品追加", new_product_path, 
+    <h1 class="text-3xl font-bold"><%= t('products.title') %></h1>
+    <%= link_to t('products.add_product'), new_product_path, 
         class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
   </div>
   
@@ -12,14 +12,14 @@
     <div class="mb-6">
       <div class="flex gap-2">
         <input type="text" 
-               placeholder="製品名で検索..." 
+               placeholder="<%= t('products.search_placeholder') %>" 
                data-search-target="input"
                data-action="input->search#filter"
                class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
         <button type="button" 
                 data-action="click->search#clear"
                 class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-          クリア
+          <%= t('common.clear') %>
         </button>
       </div>
     </div>
@@ -29,17 +29,17 @@
         
         <% if product.invalid_cost %>
           <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            原材料の計算が正しく出来ていません
+            <%= t('products.invalid_cost') %>
           </div>
         <% end %>
         
         <ul class="space-y-2 text-gray-700">
-          <li><strong>仕込み量:</strong> <%= product.count %></li>
-          <li><strong>原価:</strong> ¥<%= number_with_precision product.cost, precision: 2 %></li>
-          <li><strong>１つあたり原価:</strong> ¥<%= number_with_precision product.cost_per_unit, precision: 2 %></li>
-          <li><strong>原価<%= (current_user.profit_ratio * 100).to_i %>%として:</strong> ¥<%= number_with_precision current_user.selling_price_for(product.cost_per_unit), precision: 2 %></li>
+          <li><strong><%= t('products.preparation_amount') %></strong> <%= product.count %></li>
+          <li><strong><%= t('products.cost') %></strong> ¥<%= number_with_precision product.cost, precision: 2 %></li>
+          <li><strong><%= t('products.cost_per_unit') %></strong> ¥<%= number_with_precision product.cost_per_unit, precision: 2 %></li>
+          <li><strong><%= t('products.selling_price_as_cost_ratio') %></strong> ¥<%= number_with_precision current_user.selling_price_for(product.cost_per_unit), precision: 2 %></li>
           <li class="pt-2">
-            <%= link_to "詳細", product_path(product), 
+            <%= link_to t('common.details'), product_path(product), 
                 class: "text-blue-600 hover:text-blue-800 font-medium" %>
           </li>
         </ul>
@@ -48,8 +48,8 @@
     
     <% if @products.empty? %>
       <div class="text-center py-12">
-        <p class="text-gray-500 text-lg">まだ製品が登録されていません。</p>
-        <%= link_to "最初の製品を追加", new_product_path, 
+        <p class="text-gray-500 text-lg"><%= t('products.no_products') %></p>
+        <%= link_to t('products.add_first_product'), new_product_path, 
             class: "mt-4 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
       </div>
     <% end %>
