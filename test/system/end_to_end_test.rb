@@ -128,9 +128,7 @@ class EndToEndTest < ApplicationSystemTestCase
     # Selling price at 25% cost rate = 45円 / 0.25 = 180円
     assert_text "原価25%として: ¥180.00"
 
-    # Step 7: View product details
-    click_on "詳細"
-
+    # Step 7: Verify product details (already on show page after creation)
     assert_text "原材料"
     assert_text "強力粉"
     assert_text "500 g"
