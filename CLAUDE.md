@@ -81,3 +81,8 @@ bin/rails lint
 - products: 製品マスタ
 - product_ingredients: 製品の材料構成
 - units: 単位マスタ
+
+## 実装時の注意事項
+
+- テストが全て通るかを確認すること。
+- lintが通ることを確認すること。通らない場合、修正すること。
