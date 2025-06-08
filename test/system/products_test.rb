@@ -168,7 +168,7 @@ class ProductsTest < ApplicationSystemTestCase
     end
 
     Product.create!(name: "プリン", count: 10, user: @user).tap do |p|
-      ProductIngredient.create!(product: p, material: @egg, unit: @unit_個, count: 3)
+      ProductIngredient.create!(product: p, material: @egg, unit: @unit_piece, count: 3)
     end
 
     visit products_path
