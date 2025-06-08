@@ -28,7 +28,7 @@ class MaterialsTest < ApplicationSystemTestCase
 
     click_button "新規登録"
 
-    assert_text "材料が作成されました。"
+    assert_text "Material was successfully created."
     assert_text "小麦粉"
     assert_text "¥200.0"
   end
@@ -52,7 +52,7 @@ class MaterialsTest < ApplicationSystemTestCase
 
     click_button "更新"
 
-    assert_text "材料が更新されました。"
+    assert_text "Material was successfully updated."
     assert_text "上白糖"
     assert_text "¥180.0"
   end
@@ -71,7 +71,7 @@ class MaterialsTest < ApplicationSystemTestCase
       click_link "削除"
     end
 
-    assert_text "材料が削除されました。"
+    assert_text "Material was successfully destroyed."
     assert_no_text "塩"
   end
 

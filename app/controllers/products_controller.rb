@@ -14,7 +14,7 @@ class ProductsController < ApplicationController
     begin
       @product_form.persist!(current_user)
       product = @product_form.product
-      redirect_to product_path(product), notice: "製品が作成されました。"
+      redirect_to product_path(product), notice: "Product was successfully created."
     rescue => e
       flash.now[:error] = "作成に失敗しました: #{e.message}"
       render :new, status: :unprocessable_entity
@@ -29,7 +29,7 @@ class ProductsController < ApplicationController
     @product_form = ProductForm.new(product_form_params)
     begin
       @product_form.persist!(current_user)
-      redirect_to product_path(@product_form.product), notice: "製品が更新されました。"
+      redirect_to product_path(@product_form.product), notice: "Product was successfully updated."
     rescue => e
       flash.now[:error] = "更新に失敗しました: #{e.message}"
       render :edit, status: :unprocessable_entity
@@ -38,7 +38,7 @@ class ProductsController < ApplicationController
 
   def destroy
     @product.destroy
-    redirect_to products_path, notice: "製品が削除されました。"
+    redirect_to products_path, notice: "Product was successfully destroyed."
   end
 
   def show

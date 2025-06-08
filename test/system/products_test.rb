@@ -64,7 +64,7 @@ class ProductsTest < ApplicationSystemTestCase
 
     click_button "新規登録"
 
-    assert_text "製品が作成されました。"
+    assert_text "Product was successfully created."
     assert_text "パンケーキ"
     assert_text "仕込み数: 10"
     assert_text "原価:"
@@ -109,7 +109,7 @@ class ProductsTest < ApplicationSystemTestCase
 
     click_button "更新"
 
-    assert_text "製品が更新されました。"
+    assert_text "Product was successfully updated."
     assert_text "バタークッキー"
     assert_text "卵"
   end

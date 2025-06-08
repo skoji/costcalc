@@ -10,7 +10,7 @@ class AuthenticationTest < ApplicationSystemTestCase
 
     click_button "登録"
 
-    assert_text "アカウント登録が完了しました。"
+    assert_text "Welcome! You have signed up successfully."
     assert_current_path products_path
   end
 
@@ -28,14 +28,14 @@ class AuthenticationTest < ApplicationSystemTestCase
 
     click_button "ログイン"
 
-    assert_text "ログインしました。"
+    assert_text "Signed in successfully."
     # Deviseはroot_pathにリダイレクトし、その後productsへリダイレクトされる
     assert_current_path root_path
 
     # Sign out
     click_on "ログアウト"
 
-    assert_text "ログアウトしました。"
+    assert_text "Signed out successfully."
     assert_current_path root_path
   end
 
@@ -59,7 +59,7 @@ class AuthenticationTest < ApplicationSystemTestCase
 
     click_button "更新"
 
-    assert_text "アカウント情報を変更しました。"
+    assert_text "Your account has been updated successfully."
 
     # Verify the change persisted
     click_on "設定"

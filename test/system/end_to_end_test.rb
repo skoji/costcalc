@@ -15,7 +15,7 @@ class EndToEndTest < ApplicationSystemTestCase
 
     click_button "登録"
 
-    assert_text "アカウント登録が完了しました。"
+    assert_text "Welcome! You have signed up successfully."
 
     # Step 2: Update cost rate setting
     click_on "設定"
@@ -25,7 +25,7 @@ class EndToEndTest < ApplicationSystemTestCase
 
     click_button "更新"
 
-    assert_text "アカウント情報を変更しました。"
+    assert_text "Your account has been updated successfully."
 
     # Step 3: Create units
     # Note: In a real scenario, units might be seeded or created via UI
@@ -45,7 +45,7 @@ class EndToEndTest < ApplicationSystemTestCase
     fill_in "数量", with: "1000"
     select "g", from: "単位を選択"
     click_button "新規登録"
-    assert_text "材料が作成されました。"
+    assert_text "Material was successfully created."
 
     # Add butter
     click_on "材料追加"
@@ -54,7 +54,7 @@ class EndToEndTest < ApplicationSystemTestCase
     fill_in "数量", with: "200"
     select "g", from: "単位を選択"
     click_button "新規登録"
-    assert_text "材料が作成されました。"
+    assert_text "Material was successfully created."
 
     # Add eggs
     click_on "材料追加"
@@ -63,7 +63,7 @@ class EndToEndTest < ApplicationSystemTestCase
     fill_in "数量", with: "10"
     select "個", from: "単位を選択"
     click_button "新規登録"
-    assert_text "材料が作成されました。"
+    assert_text "Material was successfully created."
 
     # Add milk
     click_on "材料追加"
@@ -72,7 +72,7 @@ class EndToEndTest < ApplicationSystemTestCase
     fill_in "数量", with: "1000"
     select "ml", from: "単位を選択"
     click_button "新規登録"
-    assert_text "材料が作成されました。"
+    assert_text "Material was successfully created."
 
     # Step 5: Create a product
     click_on "製品"
@@ -111,7 +111,7 @@ class EndToEndTest < ApplicationSystemTestCase
 
     click_button "新規登録"
 
-    assert_text "製品が作成されました。"
+    assert_text "Product was successfully created."
 
     # Step 6: Verify cost calculations
     assert_text "クロワッサン"
@@ -160,7 +160,7 @@ class EndToEndTest < ApplicationSystemTestCase
 
     # Step 10: Logout
     click_on "ログアウト"
-    assert_text "ログアウトしました。"
+    assert_text "Signed out successfully."
   end
 
   test "cost calculation updates when material prices change" do

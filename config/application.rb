@@ -16,8 +16,11 @@ module Costcalc
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
 
-    # Set default locale to Japanese
-    config.i18n.default_locale = :ja
+    # Set default locale to Japanese for development and production
+    # Test environment will use English to maintain existing tests
+    unless Rails.env.test?
+      config.i18n.default_locale = :ja
+    end
 
     # Configuration for the application, engines, and railties goes here.
     #
