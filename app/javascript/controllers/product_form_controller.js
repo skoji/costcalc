@@ -67,8 +67,15 @@ export default class extends Controller {
   updateUnitOptions(unitSelect, unitIds) {
     const currentValue = unitSelect.value
     
-    // Clear existing options
-    unitSelect.innerHTML = '<option value="">単位を選択</option>'
+    // Mark as updating
+    unitSelect.dataset.updating = 'true'
+    
+    // Clear existing options and use the translated placeholder
+    if (!unitSelect.dataset.placeholder) {
+      console.warn('Missing data-placeholder attribute on unitSelect element.');
+    }
+    const placeholder = unitSelect.dataset.placeholder || ''
+    unitSelect.innerHTML = `<option value="">${placeholder}</option>`
     
     // Add unit options for this material
     unitIds.forEach(unitId => {
@@ -83,6 +90,17 @@ export default class extends Controller {
         unitSelect.appendChild(option)
       }
     })
+    
+    // Mark as update complete
+    delete unitSelect.dataset.updating
+    unitSelect.dataset.updated = 'true'
+    
+    // Remove the updated flag when the unitSelect value changes
+    const removeUpdatedFlag = () => {
+      delete unitSelect.dataset.updated
+      unitSelect.removeEventListener('change', removeUpdatedFlag)
+    }
+    unitSelect.addEventListener('change', removeUpdatedFlag)
   }
   
   addIngredient(event) {

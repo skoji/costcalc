@@ -41,6 +41,8 @@ class ProductsTest < ApplicationSystemTestCase
     within ".ingredient-row", match: :first do
       find("input.material-search-input").set("小麦粉")
       find("input[name*='ingredient_count']").set("200")
+      # Wait for unit options to be updated after material selection
+      assert_selector ".unit-select option[value='#{@unit_g.id}']"
       find(".unit-select").select("g")
     end
 
@@ -50,6 +52,8 @@ class ProductsTest < ApplicationSystemTestCase
     within all(".ingredient-row").last do
       find("input.material-search-input").set("砂糖")
       find("input[name*='ingredient_count']").set("50")
+      # Wait for unit options to be updated after material selection
+      assert_selector ".unit-select option[value='#{@unit_g.id}']"
       find(".unit-select").select("g")
     end
 
@@ -59,6 +63,8 @@ class ProductsTest < ApplicationSystemTestCase
     within all(".ingredient-row").last do
       find("input.material-search-input").set("卵")
       find("input[name*='ingredient_count']").set("2")
+      # Wait for unit options to be updated after material selection
+      assert_selector ".unit-select option[value='#{@unit_piece.id}']"
       find(".unit-select").select("piece")
     end
 
@@ -104,6 +110,8 @@ class ProductsTest < ApplicationSystemTestCase
     within all(".ingredient-row").last do
       find("input.material-search-input").set("卵")
       find("input[name*='ingredient_count']").set("1")
+      # Wait for unit options to be updated after material selection
+      assert_selector ".unit-select option[value='#{@unit_piece.id}']"
       find(".unit-select").select("piece")
     end
 
