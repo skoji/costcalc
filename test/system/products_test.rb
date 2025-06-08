@@ -64,7 +64,7 @@ class ProductsTest < ApplicationSystemTestCase
 
     click_button "新規登録"
 
-    assert_text "Product was successfully created."
+    assert_text "製品が作成されました。"
     assert_text "パンケーキ"
     assert_text "仕込み数: 10"
     assert_text "原価:"
@@ -98,11 +98,8 @@ class ProductsTest < ApplicationSystemTestCase
       click_on "削除"
     end
 
-    # Add new ingredient using bottom button
-    within ".ingredient-row" do
-      # Scroll will happen automatically
-      find_button("材料追加", match: :prefer_exact).click
-    end
+    # Add new ingredient using top button
+    click_on "材料追加", match: :first
 
     within all(".ingredient-row").last do
       fill_in "材料名を選択・入力", with: "卵"
@@ -112,7 +109,7 @@ class ProductsTest < ApplicationSystemTestCase
 
     click_button "更新"
 
-    assert_text "Product was successfully updated."
+    assert_text "製品が更新されました。"
     assert_text "バタークッキー"
     assert_text "卵"
   end
@@ -147,8 +144,8 @@ class ProductsTest < ApplicationSystemTestCase
     assert_text "製品10"
     assert_text "原材料"
 
-    # Return to product list
-    click_on "← 製品一覧に戻る"
+    # Return to product list (use the top link)
+    click_on "← 製品一覧に戻る", match: :first
 
     # Verify we're scrolled to the correct position
     # The product should be highlighted temporarily
@@ -211,12 +208,4 @@ class ProductsTest < ApplicationSystemTestCase
     assert_selector ".ingredient-row", count: 4
   end
 
-  private
-
-  def sign_in_as(user)
-    visit new_user_session_path
-    fill_in "メールアドレス", with: user.email
-    fill_in "パスワード", with: "password123"
-    click_button "ログイン"
-  end
 end

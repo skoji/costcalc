@@ -20,29 +20,17 @@ class MaterialsTest < ApplicationSystemTestCase
     click_on "材料追加"
 
     fill_in "材料名", with: "小麦粉"
+    fill_in "価格 (円)", with: "200"
 
-    # Add first unit
-    within ".material-quantity-row", match: :first do
-      fill_in "数量", with: "1"
-      select "kg", from: "単位"
-      fill_in "価格", with: "200"
-    end
-
-    # Add second unit
-    click_on "数量追加"
-
-    within all(".material-quantity-row").last do
-      fill_in "数量", with: "1000"
-      select "g", from: "単位"
-      fill_in "価格", with: "200"
-    end
+    # Set the unit information
+    fill_in "数量", with: "1000"
+    select "g", from: "単位を選択"
 
     click_button "新規登録"
 
-    assert_text "Material was successfully created."
+    assert_text "材料が作成されました。"
     assert_text "小麦粉"
-    assert_text "1 kg"
-    assert_text "¥200.00"
+    assert_text "¥200.0"
   end
 
   test "user can edit a material" do
@@ -60,13 +48,13 @@ class MaterialsTest < ApplicationSystemTestCase
     end
 
     fill_in "材料名", with: "上白糖"
-    fill_in "価格", with: "180"
+    fill_in "価格 (円)", with: "180"
 
     click_button "更新"
 
-    assert_text "Material was successfully updated."
+    assert_text "材料が更新されました。"
     assert_text "上白糖"
-    assert_text "¥180.00"
+    assert_text "¥180.0"
   end
 
   test "user can delete a material" do
@@ -83,7 +71,7 @@ class MaterialsTest < ApplicationSystemTestCase
       click_link "削除"
     end
 
-    assert_text "Material was successfully destroyed."
+    assert_text "材料が削除されました。"
     assert_no_text "塩"
   end
 
@@ -116,12 +104,4 @@ class MaterialsTest < ApplicationSystemTestCase
     assert_text "オリーブオイル"
   end
 
-  private
-
-  def sign_in_as(user)
-    visit new_user_session_path
-    fill_in "メールアドレス", with: user.email
-    fill_in "パスワード", with: "password123"
-    click_button "ログイン"
-  end
 end

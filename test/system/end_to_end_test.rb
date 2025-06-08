@@ -5,7 +5,9 @@ class EndToEndTest < ApplicationSystemTestCase
     # Step 1: User Registration
     visit root_path
 
-    click_on "新規登録"
+    within "nav" do
+      click_on "新規登録"
+    end
 
     fill_in "メールアドレス", with: "baker@example.com"
     fill_in "パスワード", with: "password123"
@@ -13,7 +15,7 @@ class EndToEndTest < ApplicationSystemTestCase
 
     click_button "登録"
 
-    assert_text "Welcome! You have signed up successfully."
+    assert_text "アカウント登録が完了しました。"
 
     # Step 2: Update cost rate setting
     click_on "設定"
@@ -23,7 +25,7 @@ class EndToEndTest < ApplicationSystemTestCase
 
     click_button "更新"
 
-    assert_text "Your account has been updated successfully."
+    assert_text "アカウント情報を変更しました。"
 
     # Step 3: Create units
     # Note: In a real scenario, units might be seeded or created via UI
@@ -39,46 +41,38 @@ class EndToEndTest < ApplicationSystemTestCase
 
     # Add flour
     fill_in "材料名", with: "強力粉"
-    within ".material-quantity-row", match: :first do
-      fill_in "数量", with: "1000"
-      select "g", from: "単位"
-      fill_in "価格", with: "300"
-    end
+    fill_in "価格 (円)", with: "300"
+    fill_in "数量", with: "1000"
+    select "g", from: "単位を選択"
     click_button "新規登録"
-    assert_text "Material was successfully created."
+    assert_text "材料が作成されました。"
 
     # Add butter
     click_on "材料追加"
     fill_in "材料名", with: "バター"
-    within ".material-quantity-row", match: :first do
-      fill_in "数量", with: "200"
-      select "g", from: "単位"
-      fill_in "価格", with: "400"
-    end
+    fill_in "価格 (円)", with: "400"
+    fill_in "数量", with: "200"
+    select "g", from: "単位を選択"
     click_button "新規登録"
-    assert_text "Material was successfully created."
+    assert_text "材料が作成されました。"
 
     # Add eggs
     click_on "材料追加"
     fill_in "材料名", with: "卵"
-    within ".material-quantity-row", match: :first do
-      fill_in "数量", with: "10"
-      select "個", from: "単位"
-      fill_in "価格", with: "250"
-    end
+    fill_in "価格 (円)", with: "250"
+    fill_in "数量", with: "10"
+    select "個", from: "単位を選択"
     click_button "新規登録"
-    assert_text "Material was successfully created."
+    assert_text "材料が作成されました。"
 
     # Add milk
     click_on "材料追加"
     fill_in "材料名", with: "牛乳"
-    within ".material-quantity-row", match: :first do
-      fill_in "数量", with: "1000"
-      select "ml", from: "単位"
-      fill_in "価格", with: "200"
-    end
+    fill_in "価格 (円)", with: "200"
+    fill_in "数量", with: "1000"
+    select "ml", from: "単位を選択"
     click_button "新規登録"
-    assert_text "Material was successfully created."
+    assert_text "材料が作成されました。"
 
     # Step 5: Create a product
     click_on "製品"
@@ -117,7 +111,7 @@ class EndToEndTest < ApplicationSystemTestCase
 
     click_button "新規登録"
 
-    assert_text "Product was successfully created."
+    assert_text "製品が作成されました。"
 
     # Step 6: Verify cost calculations
     assert_text "クロワッサン"
@@ -166,7 +160,7 @@ class EndToEndTest < ApplicationSystemTestCase
 
     # Step 10: Logout
     click_on "ログアウト"
-    assert_text "Signed out successfully."
+    assert_text "ログアウトしました。"
   end
 
   test "cost calculation updates when material prices change" do
@@ -209,7 +203,7 @@ class EndToEndTest < ApplicationSystemTestCase
       click_on "編集"
     end
 
-    fill_in "価格", with: "1500"
+    fill_in "価格 (円)", with: "1500"
     click_button "更新"
 
     # Check updated cost
@@ -219,12 +213,4 @@ class EndToEndTest < ApplicationSystemTestCase
     assert_text "原価30%として: ¥500.00" # 150円 / 0.3
   end
 
-  private
-
-  def sign_in_as(user)
-    visit new_user_session_path
-    fill_in "メールアドレス", with: user.email
-    fill_in "パスワード", with: "password123"
-    click_button "ログイン"
-  end
 end
