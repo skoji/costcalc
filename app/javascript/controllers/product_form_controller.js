@@ -71,7 +71,10 @@ export default class extends Controller {
     unitSelect.dataset.updating = 'true'
     
     // Clear existing options and use the translated placeholder
-    const placeholder = unitSelect.dataset.placeholder || 'Select unit'
+    if (!unitSelect.dataset.placeholder) {
+      console.warn('Missing data-placeholder attribute on unitSelect element.');
+    }
+    const placeholder = unitSelect.dataset.placeholder || ''
     unitSelect.innerHTML = `<option value="">${placeholder}</option>`
     
     // Add unit options for this material
@@ -92,10 +95,12 @@ export default class extends Controller {
     delete unitSelect.dataset.updating
     unitSelect.dataset.updated = 'true'
     
-    // Remove the updated flag after a short delay
-    setTimeout(() => {
+    // Remove the updated flag when the unitSelect value changes
+    const removeUpdatedFlag = () => {
       delete unitSelect.dataset.updated
-    }, 100)
+      unitSelect.removeEventListener('change', removeUpdatedFlag)
+    }
+    unitSelect.addEventListener('change', removeUpdatedFlag)
   }
   
   addIngredient(event) {
