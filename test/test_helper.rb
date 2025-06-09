@@ -20,5 +20,14 @@ module ActiveSupport
         password_confirmation: password
       )
     end
+
+    # Helper method to temporarily set environment variables during tests
+    def with_env(new_env)
+      old_env = ENV.to_hash
+      new_env.each { |key, value| ENV[key] = value }
+      yield
+    ensure
+      ENV.replace(old_env)
+    end
   end
 end
