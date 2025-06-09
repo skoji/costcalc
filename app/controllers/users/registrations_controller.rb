@@ -19,12 +19,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   private
 
   def check_registration_enabled
-    return if user_registration_enabled?
+    return if helpers.user_registration_enabled?
 
     redirect_to new_user_session_path, alert: t("devise.registrations.registration_disabled")
-  end
-
-  def user_registration_enabled?
-    ENV.fetch("DISABLE_USER_REGISTRATION", "false").downcase != "true"
   end
 end
