@@ -17,27 +17,21 @@ class UserRegistrationTest < ApplicationSystemTestCase
   end
 
   test "registration can be disabled via environment variable" do
-    # Temporarily set the environment variable
-    original_value = ENV["DISABLE_USER_REGISTRATION"]
-    ENV["DISABLE_USER_REGISTRATION"] = "true"
+    with_env("DISABLE_USER_REGISTRATION" => "true") do
+      visit root_path
 
-    visit root_path
+      # Sign Up link should NOT be visible in navigation
+      assert_no_selector "a", text: "Sign Up"
 
-    # Sign Up link should NOT be visible in navigation
-    assert_no_selector "a", text: "Sign Up"
+      visit new_user_session_path
+      # Sign Up link should NOT be visible on login page
+      assert_no_selector "a", text: "Sign Up"
 
-    visit new_user_session_path
-    # Sign Up link should NOT be visible on login page
-    assert_no_selector "a", text: "Sign Up"
-
-    # Trying to access registration page should redirect
-    visit new_user_registration_path
-    assert_current_path new_user_session_path
-    assert_text "New user registration is currently disabled."
-
-  ensure
-    # Restore original value
-    ENV["DISABLE_USER_REGISTRATION"] = original_value
+      # Trying to access registration page should redirect
+      visit new_user_registration_path
+      assert_current_path new_user_session_path
+      assert_text "New user registration is currently disabled."
+    end
   end
 
   test "registration controller blocks new user creation when disabled" do
@@ -48,27 +42,21 @@ class UserRegistrationTest < ApplicationSystemTestCase
       password_confirmation: "password123"
     )
 
-    # Temporarily set the environment variable
-    original_value = ENV["DISABLE_USER_REGISTRATION"]
-    ENV["DISABLE_USER_REGISTRATION"] = "true"
+    with_env("DISABLE_USER_REGISTRATION" => "true") do
+      # Try to POST to registration endpoint
+      visit new_user_registration_path
 
-    # Try to POST to registration endpoint
-    visit new_user_registration_path
+      # Should be redirected before even seeing the form
+      assert_current_path new_user_session_path
+      assert_text "New user registration is currently disabled."
 
-    # Should be redirected before even seeing the form
-    assert_current_path new_user_session_path
-    assert_text "New user registration is currently disabled."
-
-    # Verify that direct access to registration endpoint also redirects
-    # and no new user is created even if someone tries to access the POST endpoint
-    assert_no_difference "User.count" do
-      # Since we already confirmed that accessing /users/sign_up redirects,
-      # this verifies the controller-level protection is working
-      # The redirect behavior already proves the security is in place
+      # Verify that direct access to registration endpoint also redirects
+      # and no new user is created even if someone tries to access the POST endpoint
+      assert_no_difference "User.count" do
+        # Since we already confirmed that accessing /users/sign_up redirects,
+        # this verifies the controller-level protection is working
+        # The redirect behavior already proves the security is in place
+      end
     end
-
-  ensure
-    # Restore original value
-    ENV["DISABLE_USER_REGISTRATION"] = original_value
   end
 end
