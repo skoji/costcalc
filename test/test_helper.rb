@@ -27,8 +27,7 @@ module ActiveSupport
       new_env.each { |key, value| ENV[key] = value }
       yield
     ensure
-      ENV.clear
-      old_env.each { |key, value| ENV[key] = value }
+      ENV.replace(old_env)
     end
   end
 end
