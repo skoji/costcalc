@@ -101,4 +101,8 @@ bin/rails lint
 
 - テストが全て通るかを確認すること。
 - lintが通ることを確認すること。通らない場合、修正すること。
+  - lintはrubocopを使っています。特に以下の指摘は、lintで指摘される以前に対応してください。
+    - Layout/TrailingWhitespace; avoid trailing whitespace
+    - Layout/TrailingEmptyLines; final_newline
+    - Style/StringLiterals; use double_quotes
 - コミットメッセージは英語で記述すること。
