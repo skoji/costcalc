@@ -1,134 +1,134 @@
 # CostCalc
 
-�V���v���Ȍ����v�Z�A�v���P�[�V����
+シンプルな原価計算アプリケーション
 
-## �V�X�e���v��
+## システム要件
 
 * Ruby 3.4.3+
 * Rails 8.0+
 * SQLite3
 
-## �Z�b�g�A�b�v
+## セットアップ
 
 ```bash
-# �ˑ��֌W�̃C���X�g�[��
+# 依存関係のインストール
 bundle install
 
-# �f�[�^�x�[�X�̍쐬�ƃ}�C�O���[�V����
+# データベースの作成とマイグレーション
 bin/rails db:create db:migrate
 
-# �J���T�[�o�[�̋N��
+# 開発サーバーの起動
 bin/dev
 ```
 
-## �����f�[�^�̃C���|�[�g
+## 既存データのインポート
 
-costcalc-legacy����f�[�^���ڍs����ꍇ�F
+costcalc-legacyからデータを移行する場合：
 
-### ���@1: SQLite3�f�[�^�x�[�X�t�@�C�����璼�ڃC���|�[�g
+### 方法1: SQLite3データベースファイルから直接インポート
 
 ```bash
-# �����̃f�[�^�x�[�X�t�@�C�����w�肵�ăC���|�[�g
+# 既存のデータベースファイルを指定してインポート
 LEGACY_DB_PATH=/path/to/legacy/db/development.sqlite3 bin/rails import:from_legacy
 
-# �m�F�v�����v�g���X�L�b�v�������ꍇ
+# 確認プロンプトをスキップしたい場合
 FORCE=true LEGACY_DB_PATH=/path/to/legacy/db/development.sqlite3 bin/rails import:from_legacy
 ```
 
-### ���@2: SQL�_���v�t�@�C������C���|�[�g
+### 方法2: SQLダンプファイルからインポート
 
 ```bash
-# �����f�[�^�x�[�X����SQL�_���v���쐬�i���K�V�[���Ŏ��s�j
+# 既存データベースからSQLダンプを作成（レガシー側で実行）
 sqlite3 /path/to/legacy/db/development.sqlite3 .dump > legacy_dump.sql
 
-# SQL�_���v����C���|�[�g
+# SQLダンプからインポート
 SQL_DUMP_PATH=/path/to/legacy_dump.sql bin/rails import:from_sql_dump
 ```
 
-### �f�[�^����
+### データ検証
 
-�C���|�[�g��Ƀf�[�^�̐��������m�F�F
+インポート後にデータの整合性を確認：
 
 ```bash
 bin/rails import:validate
 ```
 
-### �e�X�g�p�T���v���f�[�^�̍쐬
+### テスト用サンプルデータの作成
 
 ```bash
-# �T���v���̃��K�V�[�f�[�^�x�[�X���쐬
+# サンプルのレガシーデータベースを作成
 bin/rails import:create_sample_legacy
 
-# �쐬���ꂽ�T���v���f�[�^�ŃC���|�[�g�e�X�g
+# 作成されたサンプルデータでインポートテスト
 LEGACY_DB_PATH=tmp/sample_legacy.sqlite3 bin/rails import:from_legacy
 ```
 
-## �J��
+## 開発
 
-### �e�X�g�̎��s
+### テストの実行
 
 ```bash
-# �S�e�X�g�̎��s
+# 全テストの実行
 bin/rails test
 
-# ����̃e�X�g�t�@�C���̎��s
+# 特定のテストファイルの実行
 bin/rails test test/models/material_test.rb
 
-# �C���|�[�g�@�\�̃e�X�g
+# インポート機能のテスト
 bin/rails test test/lib/import_test.rb
 ```
 
-### �f�[�^�x�[�X�̃��Z�b�g
+### データベースのリセット
 
 ```bash
-# �f�[�^�x�[�X���폜���čč쐬
+# データベースを削除して再作成
 bin/rails db:drop db:create db:migrate
 ```
 
-## ��ȋ@�\
+## 主な機能
 
-- �ޗ��Ǘ��i���i�A�P�ʕt���j
-- ���i�Ǘ��i���ޗ��̑g�ݍ��킹�j
-- �����v�Z�i�ޗ���琻�i�����������v�Z�j
-- �}���`�e�i���g�Ή��i���[�U�[���ƂɃf�[�^�����j
+- 材料管理（価格、単位付き）
+- 製品管理（原材料の組み合わせ）
+- 原価計算（材料費から製品原価を自動計算）
+- マルチテナント対応（ユーザーごとにデータ分離）
 
-## �A�[�L�e�N�`��
+## アーキテクチャ
 
-### �f�[�^���f��
+### データモデル
 
 ```
-User (���[�U�[)
-������ Materials (�ޗ�)
-��   ������ MaterialQuantities (�ޗ�����)
-��   ������ ProductIngredients (���i���ޗ�)
-������ Products (���i)
-��   ������ ProductIngredients (���i���ޗ�)
-������ Units (�P��)
+User (ユーザー)
+├── Materials (材料)
+│   ├── MaterialQuantities (材料数量)
+│   └── ProductIngredients (製品原材料)
+├── Products (製品)
+│   └── ProductIngredients (製品原材料)
+└── Units (単位)
 ```
 
-### �Z�p�X�^�b�N
+### 技術スタック
 
-- **�o�b�N�G���h**: Rails 8.0, SQLite3
-- **�t�����g�G���h**: Turbo, Stimulus, Tailwind CSS
-- **�e�X�g**: Minitest
-- **�f�v���C**: Kamal (Docker)
+- **バックエンド**: Rails 8.0, SQLite3
+- **フロントエンド**: Turbo, Stimulus, Tailwind CSS
+- **テスト**: Minitest
+- **デプロイ**: Kamal (Docker)
 
-## �f�v���C�����g
+## デプロイメント
 
-���̃A�v���P�[�V�����͕����̕��@�Ńf�v���C�\�ł��B
+このアプリケーションは複数の方法でデプロイ可能です。
 
-### ���@1: nginx + Puma
+### 方法1: nginx + Puma
 
-#### �O�����
-- Ubuntu 20.04�ȏ�
+#### 前提条件
+- Ubuntu 20.04以上
 - Ruby 3.4.3
 - nginx
 - systemd
 - SQLite3
 
-#### �Z�b�g�A�b�v�菇
+#### セットアップ手順
 
-1. **�A�v���P�[�V�����f�B���N�g���̏���**
+1. **アプリケーションディレクトリの準備**
 ```bash
 sudo mkdir -p /var/www/costcalc
 sudo chown deploy:deploy /var/www/costcalc
@@ -137,33 +137,33 @@ git clone https://github.com/yourusername/costcalc.git current
 mkdir -p shared/sockets shared/log shared/tmp/pids shared/storage
 ```
 
-2. **�ݒ�t�@�C���̃R�s�[�ƕҏW**
+2. **設定ファイルのコピーと編集**
 ```bash
-# nginx�ݒ�
+# nginx設定
 sudo cp current/config/deploy.example/nginx/costcalc.conf /etc/nginx/sites-available/
 sudo ln -s /etc/nginx/sites-available/costcalc.conf /etc/nginx/sites-enabled/
-# server_name�����ۂ̃h���C���ɕύX
+# server_nameを実際のドメインに変更
 
-# systemd�ݒ�
+# systemd設定
 sudo cp current/config/deploy.example/systemd/costcalc.service /etc/systemd/system/
-# �K�v�ɉ����ăp�X�⃆�[�U�[���𒲐�
+# 必要に応じてパスやユーザー名を調整
 ```
 
-3. **���ϐ��̐ݒ�**
+3. **環境変数の設定**
 ```bash
 cd /var/www/costcalc/current
 cp env.example .env.production.local
-# �ҏW���ĕK�v�Ȓl��ݒ�i����RAILS_MASTER_KEY�j
+# 編集して必要な値を設定（特にRAILS_MASTER_KEY）
 ```
 
-4. **����Z�b�g�A�b�v**
+4. **初回セットアップ**
 ```bash
 bundle install --deployment --without development test
 RAILS_ENV=production bundle exec rails db:create db:migrate
 RAILS_ENV=production bundle exec rails assets:precompile
 ```
 
-5. **�T�[�r�X�̊J�n**
+5. **サービスの開始**
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl enable costcalc
@@ -171,132 +171,132 @@ sudo systemctl start costcalc
 sudo nginx -s reload
 ```
 
-6. **�f�v���C�p�X�N���v�g�̐ݒ�i�I�v�V�����j**
+6. **デプロイ用スクリプトの設定（オプション）**
 ```bash
-# �f�v���C�X�N���v�g���R�s�[
+# デプロイスクリプトをコピー
 cp config/deploy.example/scripts/deploy.sh /var/www/costcalc/
 chmod +x /var/www/costcalc/deploy.sh
-# �K�v�ɉ����ăX�N���v�g�̐ݒ�l��ҏW
+# 必要に応じてスクリプトの設定値を編集
 
-# ����̃f�v���C�͈ȉ��Ŏ��s
+# 今後のデプロイは以下で実行
 /var/www/costcalc/deploy.sh
 ```
 
-### ���@2: Fly.io �ւ̃f�v���C
+### 方法2: Fly.io へのデプロイ
 
-Fly.io�͕��U�^�̃A�v���P�[�V�����v���b�g�t�H�[���ŁASQLite�A�v���P�[�V�����ɍœK�ł��B
+Fly.ioは分散型のアプリケーションプラットフォームで、SQLiteアプリケーションに最適です。
 
-#### �O�����
-- Fly CLI�̃C���X�g�[��: https://fly.io/docs/hands-on/install-flyctl/
-- Fly.io�A�J�E���g
+#### 前提条件
+- Fly CLIのインストール: https://fly.io/docs/hands-on/install-flyctl/
+- Fly.ioアカウント
 
-#### �Z�b�g�A�b�v�菇
+#### セットアップ手順
 
-1. **Fly.io�ւ̃��O�C��**
+1. **Fly.ioへのログイン**
 ```bash
 fly auth login
 ```
 
-2. **�A�v���P�[�V�����̍쐬**
+2. **アプリケーションの作成**
 ```bash
 cp fly.toml.example fly.toml
-# app�̒l�����j�[�N�Ȗ��O�ɕύX�i��: costcalc-yourname�j
+# appの値をユニークな名前に変更（例: costcalc-yourname）
 fly apps create costcalc-yourname
 ```
 
-3. **�V�[�N���b�g�̐ݒ�**
+3. **シークレットの設定**
 ```bash
 fly secrets set RAILS_MASTER_KEY=$(cat config/master.key)
 ```
 
-4. **�{�����[���̍쐬**�i�f�[�^�i�����p�j
+4. **ボリュームの作成**（データ永続化用）
 ```bash
 fly volumes create costcalc_storage --region nrt --size 1
 ```
 
-5. **�f�v���C**
+5. **デプロイ**
 ```bash
 fly deploy
 ```
 
-6. **�f�[�^�x�[�X�̃Z�b�g�A�b�v**
+6. **データベースのセットアップ**
 ```bash
 fly ssh console -C "bin/rails db:migrate"
 ```
 
-7. **�f�[�^�x�[�X�̏������i�K�v�ȏꍇ�j**
+7. **データベースの初期化（必要な場合）**
 ```bash
 fly ssh console -C "bin/rails db:seed"
 ```
 
-### ���@3: Kamal ���g�p����Docker�f�v���C
+### 方法3: Kamal を使用したDockerデプロイ
 
-�ڍׂ�[Kamal�����h�L�������g](https://kamal-deploy.org/)���Q�Ƃ��Ă��������B
-��{�I�Ȑݒ��`config/deploy.yml`�Ɋ܂܂�Ă��܂��B
+詳細は[Kamal公式ドキュメント](https://kamal-deploy.org/)を参照してください。
+基本的な設定は`config/deploy.yml`に含まれています。
 
-### �f�[�^�x�[�X�o�b�N�A�b�v
+### データベースバックアップ
 
-#### SQLite�̏ꍇ
+#### SQLiteの場合
 
-1. **�蓮�o�b�N�A�b�v**
+1. **手動バックアップ**
 ```bash
-# �{�ԃf�[�^�x�[�X�̃o�b�N�A�b�v
+# 本番データベースのバックアップ
 sqlite3 storage/production.sqlite3 ".backup storage/backup_$(date +%Y%m%d).sqlite3"
 
-# ���X�g�A���@
+# リストア方法
 cp storage/backup_20241206.sqlite3 storage/production.sqlite3
 ```
 
-2. **�����o�b�N�A�b�v�̐ݒ�iVPS���j**
+2. **自動バックアップの設定（VPS環境）**
 ```bash
-# �o�b�N�A�b�v�X�N���v�g��ݒu
+# バックアップスクリプトを設置
 sudo cp config/deploy.example/scripts/backup.sh /usr/local/bin/costcalc-backup
 sudo chmod +x /usr/local/bin/costcalc-backup
 
-# cron�W���u�̐ݒ�
+# cronジョブの設定
 sudo cp config/deploy.example/cron/costcalc-backup /etc/cron.d/
 sudo chmod 644 /etc/cron.d/costcalc-backup
 ```
 
-3. **Fly.io�ł̃o�b�N�A�b�v**
+3. **Fly.ioでのバックアップ**
 ```bash
-# �X�i�b�v�V���b�g�̍쐬
+# スナップショットの作成
 fly volumes snapshots create vol_xxxxx
 
-# �X�i�b�v�V���b�g�ꗗ
+# スナップショット一覧
 fly volumes snapshots list vol_xxxxx
 
-# ���[�J���ւ̃_�E�����[�h
+# ローカルへのダウンロード
 fly ssh console -C "cat /rails/storage/production.sqlite3" > backup.sqlite3
 ```
 
-### �o�b�N�A�b�v�̃x�X�g�v���N�e�B�X
+### バックアップのベストプラクティス
 
-1. **3-2-1���[��**
-   - 3�̃R�s�[�i�{�� + �o�b�N�A�b�v2�j
-   - 2�̈قȂ郁�f�B�A�i���[�J�� + �N���E�h�j
-   - 1�̓I�t�T�C�g�i�ʂ̏ꏊ�j
+1. **3-2-1ルール**
+   - 3つのコピー（本番 + バックアップ2つ）
+   - 2つの異なるメディア（ローカル + クラウド）
+   - 1つはオフサイト（別の場所）
 
-2. **����I�ȃ��X�g�A�e�X�g**
-   - ��1��̓o�b�N�A�b�v����̃��X�g�A���e�X�g
-   - �菇�����ŐV�ɕۂ�
+2. **定期的なリストアテスト**
+   - 月1回はバックアップからのリストアをテスト
+   - 手順書を最新に保つ
 
-3. **�Ď�**
-   - �o�b�N�A�b�v�W���u�̐���/���s���Ď�
-   - �f�B�X�N�e�ʂ̊Ď�
+3. **監視**
+   - バックアップジョブの成功/失敗を監視
+   - ディスク容量の監視
 
-### �{�Ԋ��ł̒��ӎ���
+### 本番環境での注意事項
 
-1. **�Z�L�����e�B**
-   - �K��`RAILS_MASTER_KEY`��ݒ肵�Ă�������
-   - �{�Ԋ��ł͋��͂ȃp�X���[�h�|���V�[��ݒ肵�Ă�������
-   - ����I�ɃZ�L�����e�B�A�b�v�f�[�g��K�p���Ă�������
+1. **セキュリティ**
+   - 必ず`RAILS_MASTER_KEY`を設定してください
+   - 本番環境では強力なパスワードポリシーを設定してください
+   - 定期的にセキュリティアップデートを適用してください
 
-2. **�p�t�H�[�}���X**
-   - �K�v�ɉ�����`config/puma.rb`�̃��[�J�[���𒲐����Ă�������
-   - nginx�̃L���b�V���ݒ��K�؂ɍs���Ă�������
+2. **パフォーマンス**
+   - 必要に応じて`config/puma.rb`のワーカー数を調整してください
+   - nginxのキャッシュ設定を適切に行ってください
 
-3. **�Ď�**
-   - �A�v���P�[�V�������O�����I�Ɋm�F���Ă�������
-   - �V�X�e�����\�[�X�iCPU�A�������A�f�B�X�N�j���Ď����Ă�������
+3. **監視**
+   - アプリケーションログを定期的に確認してください
+   - システムリソース（CPU、メモリ、ディスク）を監視してください
 
